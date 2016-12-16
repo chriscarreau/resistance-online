@@ -1,0 +1,125 @@
+.circleBase {
+    border-radius: 50%;
+}
+
+.pastilleContainer{
+    display: inline-block;
+    margin: 20px;
+}
+
+.pastilleMission {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 1.5REM;
+    font-weight: bold;
+}
+
+.mini-pastille {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+
+.red{
+    background-color: red; 
+}
+
+.blue{
+    background-color: blue; 
+}
+
+.white{
+    background-color: white;
+    border: solid 1px black;
+}
+
+.portal-div{
+    margin:0 auto;
+    text-align: center;
+}
+.portal-form{
+    max-width: 500px;
+    margin:0 auto;
+}
+
+.btn-portal{
+    padding: 20px;
+    margin: 20px;
+}
+
+.triangle{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 15px 10px;
+    border-color: transparent transparent #000000 transparent;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+.board{
+    border:solid 1px black;
+    position:relative;
+    text-align: center;
+    min-width:500px;
+    max-width:600px;
+    margin:0 auto;
+}
+
+.missions{
+    display: inline-block;
+    margin:0 auto;
+}
+
+.nb-joueurs,
+.nb-joueurs-equipes{
+    position:absolute;
+    bottom:0;
+}
+.nb-joueurs{
+    left:5px;
+}
+.nb-joueurs-equipes{
+    right:5px;
+}
+
+.nb-joueur-resistance{
+    color:blue;
+}
+
+.nb-joueur-espion{
+    color:red;
+}
+
+.host-code{
+    position:absolute;
+    top:20px;
+    right:0;
+}
+
+.player-card{
+    border: solid #000 1px;
+    width: 16.666666%;
+    height: 250px;
+    margin: 15px;
+}
+
+.player-mission-bleu{
+
+}
+
+.player-mission-rouge{
+
+}
+
+.player-is-leader{
+    
+}
+
+.player-name{
+    text-align:center;
+    font-size: 1.5REM;
+    font-weight: bold;    
+}

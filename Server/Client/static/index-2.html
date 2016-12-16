@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/client.js"></script>
+        <script src="js/bundle.js"></script>
+    </head>
+    <body>
+        <h1>Welcome to resistance online !</h1>
+        <div>
+            <button id="btnCreateGame">Create a game</button>
+            <button id="btnJoinGameForm">Join a game</button>
+        </div>
+        <div style="margin-top:20px;" id="joinForm">
+            <label>room code:</label>
+            <input id="roomName" name="roomName" type="text">
+            <br/>
+            <label>username:</label>
+            <input id="playerName" name="playerName" type="text">
+            <br/>
+            <button id="btnJoinGame">Join a game</button>
+        </div>
+        <div style="display:none;" id="gameDiv">
+            <div id="attenteJoueurs">En attente d'un minimum de 5 joueurs...</div>
+            <button style="display:none;" id="btnStartGame">Start a Game</button>
+            <div id="roleDiv"></div>
+            <button style="display:none;" id="btnAccepteRole">J'ai vu mon rôle</button>
+            <div id="listPlayer">
+
+            </div>
+        </div>
+    </body>
+</html>
