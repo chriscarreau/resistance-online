@@ -1,16 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import store from '../../store';
 import Board from './board.jsx';
 import HostCode from './hostCode.jsx';
 import ListPlayers from './listPlayers.jsx';
 
-export default class HostMainPage extends React.Component {
-  
-  constructor(props) {
-      super(props);
-      this.state = {
-        game: {}
-      };
-  }
+class HostMainPage extends React.Component {
 
   componentDidMount() {
     window.socket.emit('newGame');
@@ -19,17 +14,20 @@ export default class HostMainPage extends React.Component {
   }
 
   _updateGame(game){
-    this.setState({game:game});
+    store.dispatch({
+      type: 'GAME_UPDATE',
+      game: game
+    });
     console.log(game);
   }
 
   render() {
     let content = "";
-    if(this.state.game){
+    if(this.props.game){
       content = (<div>
-                  <Board game={this.state.game}/>
-                  <HostCode code={this.state.game.gameId}/>
-                  <ListPlayers players={this.state.game.players}/>
+                  <Board game={this.props.game}/>
+                  <HostCode code={this.props.game.gameId}/>
+                  <ListPlayers players={this.props.game.players}/>
                 </div>);
     }
     return (
@@ -38,3 +36,11 @@ export default class HostMainPage extends React.Component {
       </div>);
   }
 }
+
+const mapStateToProps = function(store) {
+  return {
+    game: store.game
+  };
+}
+
+export default connect(mapStateToProps)(HostMainPage);

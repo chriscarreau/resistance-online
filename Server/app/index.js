@@ -67,7 +67,6 @@ io.on('connection', function(socket){
     socket.on('startGame', function(options){
         var game = findGame(options.gameId);
         game.startGame();
-        game.assignRoles();
         for(var joueur of game.spy){
             io.to(joueur.playerId).emit('role', 'ton rôle est: espion' );
         }

@@ -8,8 +8,18 @@ var arrayTeamSize = [
     [3,4,4,5,5,5],
 ]
 
+var GameStateEnum = {
+    NOT_STARTED : 0,
+    DISTRIBUTE_ROLE : 1,
+    TEAM_SELECTION : 2,
+    VOTE : 3,
+    VOTE_RESULT : 4,
+    MISSION : 5,
+    MISSION_RESULT : 6,
+    GAME_OVER : 7
+}
+
 function Game(){
-    this.isStarted = false;
     this.gameId;
     this.players = [];
     this.spy = [];
@@ -21,6 +31,7 @@ function Game(){
     this.nbPlayersTotal = 0;
     this.playerRoleAccepte = [];
     this.hostId;
+    this.gameState = GameStateEnum.NOT_STARTED;
 };
 Game.prototype.getPlayer = function(playerId){
     for(var i = 0; i < this.players.length; i++){
@@ -45,10 +56,11 @@ Game.prototype.removePlayer = function(playerId){
 }
 
 Game.prototype.startGame = function(){
-    this.isStarted = true;
+    this.gameState = GameStateEnum.DISTRIBUTE_ROLE;
     this.nbPlayersTotal = this.players.length;
     this.firstLeader = Math.floor(Math.random()*this.nbPlayersTotal);
     this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
+    this.assignRoles();
 }
 
 Game.prototype.assignRoles = function(){

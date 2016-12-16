@@ -1,7 +1,13 @@
+var MissionResultEnum = {
+    NO_RESULT : 0,
+    SPY : 1,
+    RESISTANCE : 2
+}
+
 function Mission(){
     this.currentRound = 0;
     this.currentTeam = [];//array de player
-    this.result;
+    this.result = MissionResultEnum.NO_RESULT;
     this.teamSize;
     this.playerAccept = [];
     this.playerReject = [];
@@ -59,7 +65,7 @@ Mission.prototype.isMissionComplete = function(nbTotalPlayers){
 }
 
 Mission.prototype.getMissionResult = function(){
-    this.result = (this.playerVoteNo.length >= this.nbFailRequired) ? "FAIL" : "SUCCESS";
+    this.result = (this.playerVoteNo.length >= this.nbFailRequired) ? MissionResultEnum.SPY : MissionResultEnum.RESISTANCE;
     return this.result;
 }
 
