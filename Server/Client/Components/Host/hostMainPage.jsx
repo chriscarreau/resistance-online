@@ -23,6 +23,7 @@ class HostMainPage extends React.Component {
 
   render() {
     let content = "";
+
     if(this.props.game){
       content = (<div>
                   <Board game={this.props.game}/>
@@ -30,6 +31,7 @@ class HostMainPage extends React.Component {
                   <ListPlayers players={this.props.game.players}/>
                 </div>);
     }
+    
     return (
       <div>
         {content}

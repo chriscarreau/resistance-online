@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class HostCode extends React.Component {
+class HostCode extends React.Component {
   render() {
     return (
       <div className="host-code">
@@ -10,3 +10,5 @@ export default class HostCode extends React.Component {
     )
   }
 }
+
+export default HostCode;

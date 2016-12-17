@@ -1,7 +1,7 @@
 import React from 'react';
 import PlayerCard from './playerCard.jsx';
 
-export default class ListPlayers extends React.Component {
+class ListPlayers extends React.Component {
   render() {
     let content = "";
     if(this.props.players){
@@ -18,3 +18,5 @@ export default class ListPlayers extends React.Component {
     )
   }
 }
+
+export default ListPlayers;
