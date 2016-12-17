@@ -1,7 +1,7 @@
 import React from 'react';
 import PastilleMission from './pastilleMission.jsx';
 
-export default class Board extends React.Component {
+class Board extends React.Component {
   render() {
     return (
       <div className="board">
@@ -24,3 +24,5 @@ export default class Board extends React.Component {
     )
   }
 }
+
+export default Board;

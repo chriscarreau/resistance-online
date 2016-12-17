@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default class ClientMainPage extends React.Component {
-
+class ClientMainPage extends React.Component {
+  
   constructor(props) {
       super(props);
       this.state = {
@@ -26,3 +26,5 @@ export default class ClientMainPage extends React.Component {
     );
   }
 }
+
+export default ClientMainPage;
