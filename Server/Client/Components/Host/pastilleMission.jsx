@@ -15,4 +15,9 @@ class PastilleMission extends React.Component {
   }
 }
 
+PastilleMission.propTypes = {
+  color: React.PropTypes.string.isRequired,
+  teamSize: React.PropTypes.number.isRequired
+}
+
 export default PastilleMission;

@@ -23,12 +23,13 @@ class HostMainPage extends React.Component {
 
   render() {
     let content = "";
+    let game = this.props.game;
 
-    if(this.props.game){
+    if(game){
       content = (<div>
-                  <Board game={this.props.game}/>
-                  <HostCode code={this.props.game.gameId}/>
-                  <ListPlayers players={this.props.game.players}/>
+                  <Board game={game}/>
+                  <HostCode code={game.gameId}/>
+                  <ListPlayers players={game.players}/>
                 </div>);
     }
     
@@ -38,6 +39,10 @@ class HostMainPage extends React.Component {
       </div>);
   }
 }
+
+HostMainPage.propTypes = {
+  game: React.PropTypes.object
+};
 
 const mapStateToProps = function(store) {
   return {

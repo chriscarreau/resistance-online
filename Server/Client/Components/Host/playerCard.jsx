@@ -5,22 +5,23 @@ class PlayerCard extends React.Component {
     let nbMissionsBleu = "";
     let nbMissionsRouge = "";
     let isPlayerLeader = "";
+    let player = this.props.player;
 
-    if(this.props.player.nbMissionBleu > 0){
+    if(player.nbMissionBleu > 0){
       nbMissionsBleu = (<div className="player-mission-bleu">
                           <div className="circleBase mini-pastille blue"></div>
-                          {this.props.player.nbMissionBleu} Missions bleu
+                          {player.nbMissionBleu} Missions bleu
                         </div>);
     }
 
-    if(this.props.player.nbMissionRouge > 0){
+    if(player.nbMissionRouge > 0){
       nbMissionsRouge = ( <div className="player-mission-rouge">
                             <div className="circleBase mini-pastille red"></div>
-                            {this.props.player.nbMissionRouge} Missions rouge
+                            {player.nbMissionRouge} Missions rouge
                           </div>);
     }
     
-    if(this.props.player.isLeader){
+    if(player.isLeader){
       isPlayerLeader = (<div className="player-is-leader">
                           Leader
                         </div>);
@@ -28,7 +29,7 @@ class PlayerCard extends React.Component {
 
     let content = ( <div className="player-card">
                       <div className="player-name">
-                        {this.props.player.playerName}
+                        {player.playerName}
                       </div>
                       {nbMissionsBleu}
                       {nbMissionsRouge}
@@ -41,5 +42,9 @@ class PlayerCard extends React.Component {
         </div>);
   }
 }
+
+PlayerCard.propTypes = {
+  player: React.PropTypes.object.isRequired
+};
 
 export default PlayerCard;
