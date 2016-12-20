@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import store from '../../store';
+import store from '../../store.jsx';
 import Board from './board.jsx';
 import HostCode from './hostCode.jsx';
 import ListPlayers from './listPlayers.jsx';
+import { updateGame } from '../../Actions/game-actions.js'
 
 class HostMainPage extends React.Component {
 
@@ -14,10 +15,7 @@ class HostMainPage extends React.Component {
   }
 
   _updateGame(game){
-    store.dispatch({
-      type: 'GAME_UPDATE',
-      game: game
-    });
+    store.dispatch(updateGame(game));
     console.log(game);
   }
 

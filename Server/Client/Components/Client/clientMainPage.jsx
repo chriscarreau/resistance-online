@@ -1,23 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import store from '../../store.jsx';
+import { updateGame } from '../../Actions/game-actions.js';
 
 class ClientMainPage extends React.Component {
-  
-  constructor(props) {
-      super(props);
-      this.state = {
-        game: {}
-      };
-  }
 
   componentDidMount() {
     window.socket.emit('joinGame', window.gameOptions);
     //window.socket.on('playerJoined', this._updateGame);
     window.socket.on('gameUpdate', this._updateGame.bind(this));
   }
+
   _updateGame(game){
-    this.setState({game:game});
+    store.dispatch(updateGame(game));
     console.log(game);
   }
+
   render() {
     return (
         <div>
@@ -27,4 +25,10 @@ class ClientMainPage extends React.Component {
   }
 }
 
-export default ClientMainPage;
+const mapStateToProps = function(store) {
+  return {
+    game: store.game
+  }
+}
+
+export default connect(mapStateToProps)(ClientMainPage);
