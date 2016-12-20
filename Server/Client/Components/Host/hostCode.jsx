@@ -11,4 +11,8 @@ class HostCode extends React.Component {
   }
 }
 
+HostCode.propTypes = {
+  code: React.PropTypes.string.isRequired
+};
+
 export default HostCode;

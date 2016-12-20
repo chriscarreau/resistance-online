@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import store from '../../store';
+import store from '../../store.jsx';
 import Board from './board.jsx';
 import HostCode from './hostCode.jsx';
 import ListPlayers from './listPlayers.jsx';
+import { updateGame } from '../../Actions/game-actions.js'
 
 class HostMainPage extends React.Component {
 
@@ -14,21 +15,19 @@ class HostMainPage extends React.Component {
   }
 
   _updateGame(game){
-    store.dispatch({
-      type: 'GAME_UPDATE',
-      game: game
-    });
+    store.dispatch(updateGame(game));
     console.log(game);
   }
 
   render() {
     let content = "";
+    let game = this.props.game;
 
-    if(this.props.game){
+    if(game){
       content = (<div>
-                  <Board game={this.props.game}/>
-                  <HostCode code={this.props.game.gameId}/>
-                  <ListPlayers players={this.props.game.players}/>
+                  <Board game={game}/>
+                  <HostCode code={game.gameId}/>
+                  <ListPlayers players={game.players}/>
                 </div>);
     }
     
@@ -38,6 +37,10 @@ class HostMainPage extends React.Component {
       </div>);
   }
 }
+
+HostMainPage.propTypes = {
+  game: React.PropTypes.object
+};
 
 const mapStateToProps = function(store) {
   return {

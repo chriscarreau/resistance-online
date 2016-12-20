@@ -4,6 +4,7 @@ import PlayerCard from './playerCard.jsx';
 class ListPlayers extends React.Component {
   render() {
     let content = "";
+
     if(this.props.players){
         content = (     <div>
                         {this.props.players.map(function(x, i){
@@ -18,5 +19,9 @@ class ListPlayers extends React.Component {
     )
   }
 }
+
+ListPlayers.propTypes = {
+  players: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+};
 
 export default ListPlayers;
