@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.2">
-  <zoom_level>9</zoom_level>
+  <zoom_level>14</zoom_level>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>45</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>70</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>first player menu</panel_attributes>
     <additional_attributes/>
@@ -15,10 +15,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>153</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>238</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>GameStart</panel_attributes>
     <additional_attributes/>
@@ -26,10 +26,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
+      <x>686</x>
       <y>0</y>
-      <w>126</w>
-      <h>81</h>
+      <w>196</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 everybody's not in...</panel_attributes>
@@ -38,10 +38,10 @@ everybody's not in...</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>72</y>
-      <w>108</w>
-      <h>99</h>
+      <x>686</x>
+      <y>112</y>
+      <w>168</w>
+      <h>154</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 everybody's in!</panel_attributes>
@@ -50,10 +50,10 @@ everybody's in!</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>180</y>
-      <w>27</w>
-      <h>99</h>
+      <x>686</x>
+      <y>280</y>
+      <w>42</w>
+      <h>154</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
@@ -61,10 +61,10 @@ everybody's in!</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>261</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>406</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>GetRole</panel_attributes>
     <additional_attributes/>
@@ -72,10 +72,10 @@ everybody's in!</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>288</y>
-      <w>261</w>
-      <h>144</h>
+      <x>686</x>
+      <y>448</y>
+      <w>406</w>
+      <h>224</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 tout le monde a indiqué avoir vu son rôle
@@ -85,10 +85,10 @@ tout le monde a indiqué avoir vu son rôle
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>414</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>644</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>TeamSelection</panel_attributes>
     <additional_attributes/>
@@ -96,10 +96,10 @@ tout le monde a indiqué avoir vu son rôle
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>441</y>
-      <w>90</w>
-      <h>90</h>
+      <x>686</x>
+      <y>686</y>
+      <w>140</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 team choisit</panel_attributes>
@@ -108,10 +108,10 @@ team choisit</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>513</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>798</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>Vote</panel_attributes>
     <additional_attributes/>
@@ -119,10 +119,10 @@ team choisit</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>342</x>
-      <y>423</y>
-      <w>207</w>
-      <h>225</h>
+      <x>770</x>
+      <y>658</y>
+      <w>322</w>
+      <h>350</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 Vote non majoritaire</panel_attributes>
@@ -131,10 +131,10 @@ Vote non majoritaire</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>540</y>
-      <w>27</w>
-      <h>90</h>
+      <x>686</x>
+      <y>840</y>
+      <w>42</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
@@ -142,10 +142,10 @@ Vote non majoritaire</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>612</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>952</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>RésultatVote</panel_attributes>
     <additional_attributes/>
@@ -153,10 +153,10 @@ Vote non majoritaire</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>630</y>
-      <w>117</w>
-      <h>81</h>
+      <x>686</x>
+      <y>980</y>
+      <w>182</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 Vote majoritaire</panel_attributes>
@@ -165,10 +165,10 @@ Vote majoritaire</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>693</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>1078</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>Mission</panel_attributes>
     <additional_attributes/>
@@ -176,10 +176,10 @@ Vote majoritaire</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>774</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>1204</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>ResultatMission</panel_attributes>
     <additional_attributes/>
@@ -187,10 +187,10 @@ Vote majoritaire</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>720</y>
-      <w>27</w>
-      <h>72</h>
+      <x>686</x>
+      <y>1120</y>
+      <w>42</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
@@ -198,10 +198,10 @@ Vote majoritaire</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>801</y>
-      <w>144</w>
-      <h>81</h>
+      <x>686</x>
+      <y>1246</y>
+      <w>224</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 Une équipe a 3 points</panel_attributes>
@@ -210,10 +210,10 @@ Une équipe a 3 points</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>243</x>
-      <y>864</y>
-      <w>108</w>
-      <h>36</h>
+      <x>616</x>
+      <y>1344</y>
+      <w>168</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>GameOver</panel_attributes>
     <additional_attributes/>
@@ -221,10 +221,10 @@ Une équipe a 3 points</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>108</x>
-      <y>423</y>
-      <w>153</w>
-      <h>387</h>
+      <x>406</x>
+      <y>658</y>
+      <w>238</w>
+      <h>602</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
     <additional_attributes>150.0;410.0;10.0;410.0;10.0;10.0;150.0;10.0</additional_attributes>
@@ -232,10 +232,10 @@ Une équipe a 3 points</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>0</x>
-      <y>54</y>
-      <w>315</w>
-      <h>864</h>
+      <x>238</x>
+      <y>84</y>
+      <w>490</w>
+      <h>1344</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
     <additional_attributes>330.0;940.0;10.0;940.0;10.0;10.0;270.0;10.0</additional_attributes>
@@ -243,10 +243,10 @@ Une équipe a 3 points</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>162</x>
-      <y>441</y>
-      <w>144</w>
-      <h>288</h>
+      <x>490</x>
+      <y>686</y>
+      <w>224</w>
+      <h>448</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;
 
@@ -263,10 +263,10 @@ Une équipe a 3 points</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>54</x>
-      <y>396</y>
-      <w>522</w>
-      <h>432</h>
+      <x>322</x>
+      <y>616</y>
+      <w>812</w>
+      <h>672</h>
     </coordinates>
     <panel_attributes>Game
 halign=left
