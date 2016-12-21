@@ -9,11 +9,11 @@ class Portal extends React.Component {
         <div className="portal-form" id="joinForm">
             <div className="form-group">
                 <label htmlFor="roomName">Partie #</label>
-                <input type="text" className="form-control" id="roomName" placeholder="Partie..." />
+                <input type="text" className="form-control" id="roomName" placeholder="Partie #..." />
             </div>
             <div className="form-group">
                 <label htmlFor="playerName">Nom d'utilisateur</label>
-                <input type="text" className="form-control" id="playerName" placeholder="Nom d'utilisateur..." />
+                <input type="text" className="form-control" id="playerName" placeholder="Nom d'utilisateur..." maxLength="12"/>
             </div>
         </div>
         <div>
