@@ -19,7 +19,7 @@ class ClientMainPage extends React.Component {
   render() {
     return (
         <div>
-            allo du client
+            Votre rôle sera assigné dès que la partie aura commencé
         </div>
     );
   }

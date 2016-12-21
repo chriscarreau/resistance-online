@@ -5,21 +5,21 @@ class Portal extends React.Component {
   render() {
     return (
       <div className="portal-div">
-        <h1>Welcome to resistance online !</h1>
+        <h1>Bienvenue au jeu de Résistance en ligne!</h1>
         <div className="portal-form" id="joinForm">
             <div className="form-group">
-                <label htmlFor="roomName">Room code</label>
-                <input type="text" className="form-control" id="roomName" placeholder="Code..." />
+                <label htmlFor="roomName">Partie #</label>
+                <input type="text" className="form-control" id="roomName" placeholder="Partie #..." />
             </div>
             <div className="form-group">
-                <label htmlFor="playerName">Username</label>
-                <input type="text" className="form-control" id="playerName" placeholder="Username..." />
+                <label htmlFor="playerName">Nom d'utilisateur</label>
+                <input type="text" className="form-control" id="playerName" placeholder="Nom d'utilisateur..." maxLength="12"/>
             </div>
         </div>
         <div>
-            <button onClick={this.btnJoinGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnJoinGameForm">Join a game</button>
+            <button onClick={this.btnJoinGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnJoinGameForm">Rejoindre une partie</button>
             <hr/>
-            <button onClick={this.btnCreateGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnCreateGame">Create a game</button>
+            <button onClick={this.btnCreateGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnCreateGame">Créer une partie</button>
         </div>
       </div>
     )

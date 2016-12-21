@@ -6,14 +6,12 @@ class ListPlayers extends React.Component {
     let content = "";
 
     if(this.props.players){
-        content = (     <div>
-                        {this.props.players.map(function(x, i){
-                            return <PlayerCard key={i} player={x} />
-                        })}
-                        </div>);
+        content = this.props.players.map(function(x, i){
+                      return <PlayerCard key={i} player={x} />
+                  });
     }
     return (
-      <div>
+      <div className="list-players">
         {content}
       </div>
     )

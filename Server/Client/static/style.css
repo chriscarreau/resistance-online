@@ -1,3 +1,12 @@
+html, body{
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
+.col-xs-2{
+    width: 20%;
+}
+
 .circleBase {
     border-radius: 50%;
 }
@@ -65,12 +74,13 @@
     text-align: center;
     min-width:500px;
     max-width:600px;
-    margin:0 auto;
+    margin:10px auto;
 }
 
 .missions{
     display: inline-block;
     margin:0 auto;
+    padding-bottom: 30px;
 }
 
 .nb-joueurs,
@@ -95,15 +105,14 @@
 
 .host-code{
     position:absolute;
-    top:20px;
-    right:0;
+    top:10px;
+    right:60px;
 }
 
 .player-card{
     border: solid #000 1px;
-    width: 16.666666%;
-    height: 250px;
-    margin: 15px;
+    height: 225px;
+    margin: 10px;
 }
 
 .player-mission-bleu{

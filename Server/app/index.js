@@ -13,7 +13,6 @@ const util      = require('util');
 //game variables
 var games = [];
 
-
 app.use('/', express.static(path.resolve('./Client/static/')));
 
 app.get('*', function (request, response){
@@ -108,7 +107,7 @@ function findGame(gameId){
 function makeUniqueId()
 {
     var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var possible = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 
     do{
         var text = "";
