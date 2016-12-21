@@ -37,7 +37,7 @@ class PlayerCard extends React.Component {
                     </div>)
 
     return (
-        <div>
+        <div className="col-xs-3">
           {content}
         </div>);
   }

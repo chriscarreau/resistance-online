@@ -1,3 +1,8 @@
+html, body{
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
 .circleBase {
     border-radius: 50%;
 }
@@ -65,12 +70,13 @@
     text-align: center;
     min-width:500px;
     max-width:600px;
-    margin:0 auto;
+    margin:60px auto;
 }
 
 .missions{
     display: inline-block;
     margin:0 auto;
+    padding-bottom: 30px;
 }
 
 .nb-joueurs,
@@ -95,13 +101,12 @@
 
 .host-code{
     position:absolute;
-    top:20px;
-    right:0;
+    top:60px;
+    right:60px;
 }
 
 .player-card{
     border: solid #000 1px;
-    width: 16.666666%;
     height: 250px;
     margin: 15px;
 }
