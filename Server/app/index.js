@@ -57,15 +57,16 @@ io.on('connection', function(socket){
         io.to(game.hostId).emit('playerJoined', player );
         if(game.players.length == 1){
             game.firstPlayer = player;
-            socket.emit('firstPlayer');
+            socket.emit('gameUpdate', game);
         }
         if(game.players.length >= 5){
             io.to(game.players[0].playerId).emit('gameReadyToStart');
         }
-        io.to(game.hostId).emit('gameUpdate', game);
+        io.to(game.gameId).emit('gameUpdate', game);
     });
 
     //TODO: ENLEVER et remplacer par 'updateGame' côté client
+    /*
     socket.on('startGame', function(options){
         var game = findGame(options.gameId);
         game.startGame();
@@ -81,6 +82,7 @@ io.on('connection', function(socket){
         socket.join(game.gameId);
         io.to(game.hostId).emit('gameUpdate', game);
     });
+    */
     //TODO: ENLEVER et remplacer par 'updateGame' côté client
     socket.on('acceptRole', function(options){
         var game = findGame(options.gameId);

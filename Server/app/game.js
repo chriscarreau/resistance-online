@@ -9,6 +9,11 @@ var arrayTeamSize = [
     [3,4,4,5,5,5],
 ]
 
+var RoleEnum = {
+    SPY : 0,
+    RESISTANCE : 1
+}
+
 var GameStateEnum = {
     NOT_STARTED : 0,
     DISTRIBUTE_ROLE : 1,
@@ -95,7 +100,7 @@ Game.prototype.update = function(io, clientAction){
         default:
             break;
     }
-    io.to(game.hostId).emit('gameUpdate', this);
+    io.to(this.hostId).emit('gameUpdate', this);
 }
 Game.prototype.resetGame = function(){
     this.spy = [];
@@ -154,11 +159,14 @@ Game.prototype.startGame = function(io){
 
     //envoie un message a tous les joueurs avec leurs rôles
     for(var joueur of this.spy){
+        joueur.role = RoleEnum.SPY;
         io.to(joueur.playerId).emit('role', 'ton rôle est: espion' );
     }
     for(var joueur of this.resistance){
+        joueur.role = RoleEnum.RESISTANCE;
         io.to(joueur.playerId).emit('role', 'ton rôle est: resistance' );
     }
+    io.to(this.gameId).emit('gameUpdate', this);
 }
 
 Game.prototype.assignRoles = function(){

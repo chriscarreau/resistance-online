@@ -1,4 +1,5 @@
 function Player(){
+    this.role;
     this.playerId;
     this.playerName;
     this.isLeader = false;
