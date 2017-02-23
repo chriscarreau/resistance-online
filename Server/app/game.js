@@ -1,4 +1,5 @@
 var Mission = require('./mission.js');
+var Player = require('./player.js');
 
 var arrayTeamSize = [
     [2,2,2,3,3,3],
@@ -21,6 +22,7 @@ var GameStateEnum = {
 
 function Game(){
     this.gameId;
+    this.firstPlayer = {};
     this.players = [];
     this.spy = [];
     this.resistance = [];
@@ -38,16 +40,24 @@ function Game(){
 Game.prototype.update = function(io, clientAction){
     switch (this.gameState) {
         case GameStateEnum.NOT_STARTED:
-            // Ici y'a rien a faire, on attend que le joueur 1 appuie sur "commencer la game", et on va direct changer l'état
+            if(clientAction.playerId === this.firstPlayer.playerId && clientAction.message === 'START_GAME'){
+                this.gameState = GameStateEnum.DISTRIBUTE_ROLE;
+                this.startGame(io);
+            }
             break;
         case GameStateEnum.DISTRIBUTE_ROLE:
+            if(clientAction.message === 'ACCEPT_ROLE'){
+                let player = this.getPlayer(clientAction.playerId);
+                this.acceptRole(player);
+            }
             // On attends que tout le monde ait accepté son rôle
             if(this.hasEveryoneAcceptedRole()){
                 this.gameState = GameStateEnum.TEAM_SELECTION;
             }
             break;
         case GameStateEnum.TEAM_SELECTION:
-            //Ici y'a rien à faire côté serveur
+            //TO DO: quand le leader appuie sur un joueur, updater visuellement la liste sur l'host
+            // et quand le leader appuie sur 'soumettre', finaliser son choix et changer d'état
             
             break;
         case GameStateEnum.VOTE:
@@ -58,7 +68,7 @@ Game.prototype.update = function(io, clientAction){
             break;
         case GameStateEnum.VOTE_RESULT:
             //Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine mission"
-            if(clientAction === "NEXT_STEP"){
+            if(clientAction.message === "NEXT_STEP"){
                 // Accepté
                 if (this.missions[this.currentMission].isMissionAccepted) {
                     this.gameState = GameStateEnum.MISSION;
@@ -120,15 +130,35 @@ Game.prototype.removePlayer = function(playerId){
     }
 }
 
-Game.prototype.startGame = function(){
-    this.gameState = GameStateEnum.DISTRIBUTE_ROLE;
+Game.prototype.startGame = function(io){
     this.nbPlayersTotal = this.players.length;
     this.firstLeader = Math.floor(Math.random()*this.nbPlayersTotal);
     this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
+    //On remplis un tableau dans l'objet Game contenant la grosseur des équipes pour chaque mission, maintenant que tous les joueurs sont présents
     for (var i = 0; i < arrayTeamSize.length; i++) {
         this.teamSizes.push(arrayTeamSize[i][this.nbPlayersTotal-5]);
     }
+
+    for(let i = 0; i < 5; i++){
+        let mission = new Mission();
+        let nbFailRequired = 1;
+        if(i == 3 && this.nbPlayersTotal > 6){
+            nbFailRequired = 2;
+        }
+        mission.teamSize = this.teamSizes[i];
+        mission.nbFailRequired = nbFailRequired;
+        this.missions.push(mission);
+    }
+    //assigne les rôles
     this.assignRoles();
+
+    //envoie un message a tous les joueurs avec leurs rôles
+    for(var joueur of this.spy){
+        io.to(joueur.playerId).emit('role', 'ton rôle est: espion' );
+    }
+    for(var joueur of this.resistance){
+        io.to(joueur.playerId).emit('role', 'ton rôle est: resistance' );
+    }
 }
 
 Game.prototype.assignRoles = function(){
@@ -169,19 +199,11 @@ Game.prototype.hasEveryoneAcceptedRole = function(){
 }
 
 Game.prototype.startNewMission = function(){
-    var teamsize = this.teamSizes[this.currentMission]
-    var nbFailRequired = 1;
-    if(this.currentMission == 3 && this.nbPlayersTotal > 6){
-        nbFailRequired = 2;
-    }
-    var mission = new Mission();
-    mission.teamSize = teamsize;
-    mission.nbFailRequired = nbFailRequired;
+    var mission = this.missions[this.currentMission]
     if(this.currentMission !== 0){
-        this.firstLeader = this.getCurrentLeader() + 1;
+        this.firstLeader = (this.getCurrentLeader() + 1) % this.nbPlayersTotal;
         this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
     }
-    this.missions.push(mission);
     this.currentMission++;
 }
 Game.prototype.getCurrentLeader = function(){
