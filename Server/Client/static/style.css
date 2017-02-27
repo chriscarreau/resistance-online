@@ -132,3 +132,7 @@ html, body{
     font-size: 1.5REM;
     font-weight: bold;    
 }
+
+.player-selected{
+    background-color: #f3e20a;
+}

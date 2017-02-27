@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import store from '../../store.jsx';
 import { updateGame } from '../../Actions/game-actions.js';
 import PageRole from './pageRole.jsx';
+import PageTeamSelection from './pageTeamSelection.jsx';
 
 class ClientMainPage extends React.Component {
 
@@ -76,6 +77,10 @@ class ClientMainPage extends React.Component {
         break;
         case GameStateEnum.DISTRIBUTE_ROLE:
           content = <PageRole player={this.getCurrentJoueur()}></PageRole>
+        break;
+        case GameStateEnum.TEAM_SELECTION:
+          content = <PageTeamSelection player={this.getCurrentJoueur()} game={this.props.game}></PageTeamSelection>
+        break;
         default:
         break;
       }

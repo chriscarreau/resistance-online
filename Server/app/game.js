@@ -1,5 +1,6 @@
 var Mission = require('./mission.js');
 var Player = require('./player.js');
+const util      = require('util');
 
 var arrayTeamSize = [
     [2,2,2,3,3,3],
@@ -51,19 +52,30 @@ Game.prototype.update = function(io, clientAction){
             }
             break;
         case GameStateEnum.DISTRIBUTE_ROLE:
+            console.log('passe dans distribute_role...');
+            console.log('');
             if(clientAction.message === 'ACCEPT_ROLE'){
                 let player = this.getPlayer(clientAction.playerId);
                 this.acceptRole(player);
             }
             // On attends que tout le monde ait accepté son rôle
             if(this.hasEveryoneAcceptedRole()){
+                this.players[this.firstLeader].isLeader = true;
                 this.gameState = GameStateEnum.TEAM_SELECTION;
             }
             break;
         case GameStateEnum.TEAM_SELECTION:
-            //TO DO: quand le leader appuie sur un joueur, updater visuellement la liste sur l'host
-            // et quand le leader appuie sur 'soumettre', finaliser son choix et changer d'état
-            
+            let tmpCurrentMission = this.missions[this.currentMission];
+            if(clientAction.message === 'ADD_PLAYER_TEAM'){
+                let player = this.getPlayer(clientAction.playerId);
+                tmpCurrentMission.addPlayerToTeam(player);
+            }
+            else if (clientAction.message === 'SUBMIT_TEAM'){
+                //TODO: check si la team est legit (bon nombre de joueurs)
+                if(tmpCurrentMission.currentTeam.length === tmpCurrentMission.teamSize){
+                    this.gameState = GameStateEnum.VOTE;
+                }
+            }            
             break;
         case GameStateEnum.VOTE:
             //Si tout le monde a voté, on passe au résultat
@@ -100,7 +112,8 @@ Game.prototype.update = function(io, clientAction){
         default:
             break;
     }
-    io.to(this.hostId).emit('gameUpdate', this);
+    console.log(util.inspect(this));
+    io.to(this.gameId).emit('gameUpdate', this);
 }
 Game.prototype.resetGame = function(){
     this.spy = [];
@@ -219,7 +232,8 @@ Game.prototype.getCurrentLeader = function(){
 }
 
 function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  var currentIndex = array.length, temporaryValue, randomIndex, tempArray;
+  tempArray = Array.from(array);
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
@@ -229,12 +243,12 @@ function shuffle(array) {
     currentIndex -= 1;
 
     // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    temporaryValue = tempArray[currentIndex];
+    tempArray[currentIndex] = tempArray[randomIndex];
+    tempArray[randomIndex] = temporaryValue;
   }
 
-  return array;
+  return tempArray;
 }
 
 module.exports = Game;
