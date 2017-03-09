@@ -1,24 +1,20 @@
 import React from 'react';
 import PlayerBar from './playerBar.jsx';
+import {IsPlayerInCurrentTeam, RoleEnum, IsCurrentTeamComplete} from '../../Utils.js';
 
 class PageTeamSelection extends React.Component {
 
-  isPlayerInCurrentTeam(player){
-      let team = this.props.game.missions[this.props.game.currentMission].currentTeam;
-      for(var i = 0; i < team.length; i++){
-        if(team[i].playerId === player.playerId){
-            return true;
-        }
-      }
-      return false;
+  submitTeam(){
+    let ClientAction = {
+        playerId: window.gameOptions.playerId,
+        gameId: window.gameOptions.gameId,
+        message:"SUBMIT_TEAM"
+    }
+    window.socket.emit('gameUpdate', ClientAction);
   }
 
   render() {
     var that = this;
-    var RoleEnum = {
-        SPY : 0,
-        RESISTANCE : 1
-    }
     let content = "", leader = "", autre = "";
     if(this.props.player.isLeader){
       leader = ( <div>
@@ -29,11 +25,14 @@ class PageTeamSelection extends React.Component {
                     this.props.game.players.map(function(x, i){
                         let playerBar = "";
                         if(x !== that.props.player){
-                            playerBar = (  <PlayerBar key={i} selected={that.isPlayerInCurrentTeam(x)} player={x}></PlayerBar>)
+                            playerBar = (  <PlayerBar key={i} selected={IsPlayerInCurrentTeam(x, that.props.game)} player={x}></PlayerBar>)
                         }
                         return playerBar;
                         })
                     }
+                    <div>
+                      <button disabled={!IsCurrentTeamComplete(this.props.game)} onClick={this.submitTeam} className="btn btn-primary">Soumettre</button>
+                    </div>
                   </div>);
     }else{
       autre = ( <div>

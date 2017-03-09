@@ -29,6 +29,19 @@ Mission.prototype.removePlayerFromTeam = function(playerId){
     }
 }
 
+Mission.prototype.isPlayerInTeam = function(playerId){
+    for(var i = 0; i < this.currentTeam.length; i++){
+        if(this.currentTeam[i].playerId === playerId){
+            return true;
+        }
+    }
+}
+
+//J'arrive pas à le faire marcher côté client..... 
+Mission.prototype.isCurrentTeamComplete = function(){
+    return this.currentTeam.length === this.teamSize;
+}
+
 Mission.prototype.acceptTeam = function(player){
     addPlayerToArray(this.playerAccept, player);
 }
@@ -60,12 +73,20 @@ Mission.prototype.voteFail = function(player){
     addPlayerToArray(this.playerVoteFail, player);
 }
 
-Mission.prototype.isMissionComplete = function(nbTotalPlayers){
-    return (this.playerVoteYes.length + this.playerVoteNo.length >= nbTotalPlayers);
+Mission.prototype.isMissionComplete = function(){
+    return (this.playerVoteSuccess.length + this.playerVoteFail.length >= this.teamSize);
 }
 
 Mission.prototype.getMissionResult = function(){
-    this.result = (this.playerVoteNo.length >= this.nbFailRequired) ? MissionResultEnum.SPY : MissionResultEnum.RESISTANCE;
+    this.result = (this.playerVoteFail.length >= this.nbFailRequired) ? MissionResultEnum.SPY : MissionResultEnum.RESISTANCE;
+    for(var i = 0; i < this.currentTeam.length; i++){
+        if(this.result === MissionResultEnum.SPY){
+            this.currentTeam[i].nbMissionRouge++;
+        }
+        else{
+            this.currentTeam[i].nbMissionBleu++;
+        }
+    }
     return this.result;
 }
 

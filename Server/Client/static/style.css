@@ -133,6 +133,41 @@ html, body{
     font-weight: bold;    
 }
 
+.player-bar{
+    text-align: center;
+    border: solid 1px black;
+    margin: 15px;
+    padding: 10px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
 .player-selected{
-    background-color: #f3e20a;
+    background-color: #ffed9a;
+}
+
+.boutton-mission-background,
+.boutton-vote-background{
+    padding: 20px;
+    width: 80%;
+    text-align: center;
+    margin: 20px;
+}
+
+.boutton-vote-background{
+    background-color: #888;
+}
+
+.bouton-success{
+    background-color: #23a7ff;
+}
+
+.bouton-fail{
+    background-color: #ff4040;
+}
+
+.boutton-mission-background img,
+.boutton-vote-background img{
+    max-height:200px;
+    max-width:100%;
 }

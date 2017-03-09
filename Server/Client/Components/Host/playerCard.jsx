@@ -27,7 +27,7 @@ class PlayerCard extends React.Component {
                         </div>);
     }
 
-    let content = ( <div className="player-card">
+    let content = ( <div className={this.props.selected ? "player-selected player-card" : "player-card"}>
                       <div className="player-name">
                         {player.playerName}
                       </div>
@@ -44,7 +44,8 @@ class PlayerCard extends React.Component {
 }
 
 PlayerCard.propTypes = {
-  player: React.PropTypes.object.isRequired
+  player: React.PropTypes.object.isRequired,
+  selected: React.PropTypes.bool.isRequired
 };
 
 export default PlayerCard;

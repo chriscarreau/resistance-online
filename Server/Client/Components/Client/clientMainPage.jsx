@@ -4,6 +4,9 @@ import store from '../../store.jsx';
 import { updateGame } from '../../Actions/game-actions.js';
 import PageRole from './pageRole.jsx';
 import PageTeamSelection from './pageTeamSelection.jsx';
+import PageVote from './pageVote.jsx';
+import PageMission from './pageMission.jsx';
+import {GameStateEnum, GetCurrentJoueur, IsPremierJoueur} from '../../Utils.js';
 
 class ClientMainPage extends React.Component {
 
@@ -27,39 +30,22 @@ class ClientMainPage extends React.Component {
     window.socket.emit('gameUpdate', ClientAction);
   }
 
-  getCurrentJoueur(){
-    for(let joueur of this.props.game.players){
-      if(joueur.playerId === window.gameOptions.playerId){
-        return joueur;
-      }
+  prochaineEtape(){
+    let ClientAction = {
+      playerId:window.gameOptions.playerId,
+      gameId:window.gameOptions.gameId,
+      message:"NEXT_STEP"
     }
-    return null;
-  }
-
-  isPremierJoueur(){
-    if(this.props.game){
-      return (this.props.game.firstPlayer.playerId == window.socket.id);
-    }
-    return false;
+    window.socket.emit('gameUpdate', ClientAction);
   }
 
   render() {
     let content = "";
-    var GameStateEnum = {
-      NOT_STARTED : 0,
-      DISTRIBUTE_ROLE : 1,
-      TEAM_SELECTION : 2,
-      VOTE : 3,
-      VOTE_RESULT : 4,
-      MISSION : 5,
-      MISSION_RESULT : 6,
-      GAME_OVER : 7
-  }
     if(this.props.game){
       switch(this.props.game.gameState){
         case GameStateEnum.NOT_STARTED:
           content = "Votre rôle sera assigné dès que la partie aura commencé";
-          if(this.isPremierJoueur()){
+          if(IsPremierJoueur(this.props.game)){
             if(this.props.game.players.length >= 5){
               content = (<div>
                           <div>
@@ -76,10 +62,29 @@ class ClientMainPage extends React.Component {
           }
         break;
         case GameStateEnum.DISTRIBUTE_ROLE:
-          content = <PageRole player={this.getCurrentJoueur()}></PageRole>
+          content = <PageRole player={GetCurrentJoueur(this.props.game)}></PageRole>
         break;
         case GameStateEnum.TEAM_SELECTION:
-          content = <PageTeamSelection player={this.getCurrentJoueur()} game={this.props.game}></PageTeamSelection>
+          content = <PageTeamSelection player={GetCurrentJoueur(this.props.game)} game={this.props.game}></PageTeamSelection>
+        break;
+        case GameStateEnum.VOTE:
+          content = <PageVote game={this.props.game} ></PageVote>
+        break;
+        case GameStateEnum.VOTE_RESULT:
+          if(IsPremierJoueur(this.props.game)){
+            content = ( <div>
+                          <button onClick={this.prochaineEtape}>Prochaine étape</button>
+                        </div>);
+          }
+          else{
+            content = "CHECK LE RESULTAT SU'A GROSSE ECRAN";
+          }
+        break;
+        case GameStateEnum.MISSION:
+          content = <PageMission game={this.props.game} ></PageMission>
+        break;
+        case GameStateEnum.MISSION_RESULT:
+          content = <PageVote game={this.props.game} ></PageVote>
         break;
         default:
         break;

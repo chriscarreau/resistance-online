@@ -1,30 +1,7 @@
 var Mission = require('./mission.js');
 var Player = require('./player.js');
+var tools = require('./tools.js');
 const util      = require('util');
-
-var arrayTeamSize = [
-    [2,2,2,3,3,3],
-    [3,3,3,4,4,4],
-    [2,4,3,4,4,4],
-    [3,3,4,5,5,5],
-    [3,4,4,5,5,5],
-]
-
-var RoleEnum = {
-    SPY : 0,
-    RESISTANCE : 1
-}
-
-var GameStateEnum = {
-    NOT_STARTED : 0,
-    DISTRIBUTE_ROLE : 1,
-    TEAM_SELECTION : 2,
-    VOTE : 3,
-    VOTE_RESULT : 4,
-    MISSION : 5,
-    MISSION_RESULT : 6,
-    GAME_OVER : 7
-}
 
 function Game(){
     this.gameId;
@@ -40,72 +17,104 @@ function Game(){
     this.playerRoleAccepte = [];
     this.teamSizes = [];
     this.hostId;
-    this.gameState = GameStateEnum.NOT_STARTED;
+    this.gameState = tools.GameStateEnum.NOT_STARTED;
 };
 
 Game.prototype.update = function(io, clientAction){
+    let currentMission = this.missions[this.currentMission];
+    let player = this.getPlayer(clientAction.playerId);
     switch (this.gameState) {
-        case GameStateEnum.NOT_STARTED:
+        case tools.GameStateEnum.NOT_STARTED:
             if(clientAction.playerId === this.firstPlayer.playerId && clientAction.message === 'START_GAME'){
-                this.gameState = GameStateEnum.DISTRIBUTE_ROLE;
+                this.gameState = tools.GameStateEnum.DISTRIBUTE_ROLE;
                 this.startGame(io);
             }
             break;
-        case GameStateEnum.DISTRIBUTE_ROLE:
-            console.log('passe dans distribute_role...');
-            console.log('');
+        case tools.GameStateEnum.DISTRIBUTE_ROLE:
             if(clientAction.message === 'ACCEPT_ROLE'){
                 let player = this.getPlayer(clientAction.playerId);
                 this.acceptRole(player);
             }
             // On attends que tout le monde ait accepté son rôle
             if(this.hasEveryoneAcceptedRole()){
-                this.players[this.firstLeader].isLeader = true;
-                this.gameState = GameStateEnum.TEAM_SELECTION;
+                this.players[this.getCurrentLeader()].isLeader = true;
+                this.gameState = tools.GameStateEnum.TEAM_SELECTION;
             }
             break;
-        case GameStateEnum.TEAM_SELECTION:
-            let tmpCurrentMission = this.missions[this.currentMission];
-            if(clientAction.message === 'ADD_PLAYER_TEAM'){
-                let player = this.getPlayer(clientAction.playerId);
-                tmpCurrentMission.addPlayerToTeam(player);
+        case tools.GameStateEnum.TEAM_SELECTION:
+            if(clientAction.message === 'ADD_REMOVE_PLAYER_TEAM'){
+                if(currentMission.isPlayerInTeam(player.playerId)){
+                    currentMission.removePlayerFromTeam(player.playerId);
+                }
+                else{
+                    currentMission.addPlayerToTeam(player);
+                }
             }
             else if (clientAction.message === 'SUBMIT_TEAM'){
-                //TODO: check si la team est legit (bon nombre de joueurs)
-                if(tmpCurrentMission.currentTeam.length === tmpCurrentMission.teamSize){
-                    this.gameState = GameStateEnum.VOTE;
+                if(currentMission.currentTeam.length === currentMission.teamSize){
+                    //si on est au dernier round, pas de vote
+                    if(currentMission.currentRound === 4){
+                        this.gameState = tools.GameStateEnum.MISSION;
+                    }
+                    else{
+                        this.gameState = tools.GameStateEnum.VOTE;
+                    }
                 }
             }            
             break;
-        case GameStateEnum.VOTE:
+        case tools.GameStateEnum.VOTE:
+            if(clientAction.message === 'VOTE_ACCEPT'){
+                currentMission.acceptTeam(player);
+            }
+            else if(clientAction.message === 'VOTE_REJECT'){
+                currentMission.rejectTeam(player);
+            }
+        
             //Si tout le monde a voté, on passe au résultat
-            if(this.missions[this.currentMission].hasEveryoneVoted()){
-                this.gameState = GameStateEnum.VOTE_RESULT;
+            if(currentMission.hasEveryoneVoted(this.nbPlayersTotal)){
+                this.gameState = tools.GameStateEnum.VOTE_RESULT;
             }
             break;
-        case GameStateEnum.VOTE_RESULT:
-            //Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine mission"
+        case tools.GameStateEnum.VOTE_RESULT:
+            //Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine étape"
             if(clientAction.message === "NEXT_STEP"){
                 // Accepté
-                if (this.missions[this.currentMission].isMissionAccepted) {
-                    this.gameState = GameStateEnum.MISSION;
+                if (currentMission.isMissionAccepted()) {
+                    this.gameState = tools.GameStateEnum.MISSION;
                 }
                 // Refusé
                 else{
-                    this.gameState = GameStateEnum.TEAM_SELECTION;
+                    this.players[this.getCurrentLeader()].isLeader = false;
+                    currentMission.voteRejected();
+                    this.players[this.getCurrentLeader()].isLeader = true;
+                    this.gameState = tools.GameStateEnum.TEAM_SELECTION;
                 }
             }
             break;
-        case GameStateEnum.MISSION:
-            if(this.missions[this.currentMission].isMissionComplete()){
+        case tools.GameStateEnum.MISSION:
+            if(clientAction.message === 'VOTE_SUCCESS'){
+                currentMission.voteSuccess(player);
+            }
+            else if(clientAction.message === 'VOTE_FAIL'){
+                currentMission.voteFail(player);
+            }
+            if(currentMission.isMissionComplete(this.nbPlayersTotal)){
                 this.missions[this.currentMission].getMissionResult();
-                this.gameState = GameStateEnum.MISSION_RESULT;
+                this.gameState = tools.GameStateEnum.MISSION_RESULT;
             }
             break;
-        case GameStateEnum.MISSION_RESULT:
-            
+        case tools.GameStateEnum.MISSION_RESULT:
+            //Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine étape"
+            if(clientAction.message === "NEXT_STEP"){
+                if(this.hasATeamWon()){
+                    this.gameState = tools.GameStateEnum.GAME_OVER;
+                }
+                else{
+                    this.gameState = tools.GameStateEnum.TEAM_SELECTION;
+                }
+            }
             break;
-        case GameStateEnum.GAME_OVER:
+        case tools.GameStateEnum.GAME_OVER:
             this.resetGame();
             break;
     
@@ -123,7 +132,8 @@ Game.prototype.resetGame = function(){
     this.firstLeader = 0;
     this.lastLeader = 0;
     this.playerRoleAccepte = [];
-    this.gameState = GameStateEnum.NOT_STARTED;
+    this.gameState = tools.GameStateEnum.NOT_STARTED;
+    //TODO: Reset players (genre isLeader, hasAcceptedRole)
 }
 
 Game.prototype.getPlayer = function(playerId){
@@ -153,8 +163,8 @@ Game.prototype.startGame = function(io){
     this.firstLeader = Math.floor(Math.random()*this.nbPlayersTotal);
     this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
     //On remplis un tableau dans l'objet Game contenant la grosseur des équipes pour chaque mission, maintenant que tous les joueurs sont présents
-    for (var i = 0; i < arrayTeamSize.length; i++) {
-        this.teamSizes.push(arrayTeamSize[i][this.nbPlayersTotal-5]);
+    for (var i = 0; i < tools.arrayTeamSize.length; i++) {
+        this.teamSizes.push(tools.arrayTeamSize[i][this.nbPlayersTotal-5]);
     }
 
     for(let i = 0; i < 5; i++){
@@ -172,11 +182,11 @@ Game.prototype.startGame = function(io){
 
     //envoie un message a tous les joueurs avec leurs rôles
     for(var joueur of this.spy){
-        joueur.role = RoleEnum.SPY;
+        joueur.role = tools.RoleEnum.SPY;
         io.to(joueur.playerId).emit('role', 'ton rôle est: espion' );
     }
     for(var joueur of this.resistance){
-        joueur.role = RoleEnum.RESISTANCE;
+        joueur.role = tools.RoleEnum.RESISTANCE;
         io.to(joueur.playerId).emit('role', 'ton rôle est: resistance' );
     }
     io.to(this.gameId).emit('gameUpdate', this);
@@ -213,6 +223,7 @@ Game.prototype.assignRoles = function(){
 
 Game.prototype.acceptRole = function(player){
     addPlayerToArray(this.playerRoleAccepte, player);
+    player.hasAcceptedRole = true;
 }
 
 Game.prototype.hasEveryoneAcceptedRole = function(){
@@ -221,14 +232,25 @@ Game.prototype.hasEveryoneAcceptedRole = function(){
 
 Game.prototype.startNewMission = function(){
     var mission = this.missions[this.currentMission]
-    if(this.currentMission !== 0){
-        this.firstLeader = (this.getCurrentLeader() + 1) % this.nbPlayersTotal;
-        this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
-    }
+    this.firstLeader = (this.getCurrentLeader() + 1) % this.nbPlayersTotal;
+    this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
     this.currentMission++;
 }
 Game.prototype.getCurrentLeader = function(){
-    return this.firstLeader + this.missions[this.currentMission - 1].currentRound;
+    return this.firstLeader + this.missions[this.currentMission].currentRound;
+}
+
+Game.prototype.hasATeamWon = function(){
+    let scoreResistance = 0, scoreSpy = 0;
+    for(let i = 0; i < this.missions.length; i++){
+        if(this.missions[i].result === tools.MissionResultEnum.RESISTANCE){
+            scoreResistance++;
+        }
+        else if(this.missions[i].result === tools.MissionResultEnum.SPY){
+            scoreSpy++;
+        }
+    }
+    return (scoreSpy >= 3 || scoreResistance >= 3);
 }
 
 function shuffle(array) {

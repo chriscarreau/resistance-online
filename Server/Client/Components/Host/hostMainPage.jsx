@@ -4,7 +4,10 @@ import store from '../../store.jsx';
 import Board from './board.jsx';
 import HostCode from './hostCode.jsx';
 import ListPlayers from './listPlayers.jsx';
+import VoteResult from './voteResult.jsx';
+import MissionResult from './missionResult.jsx';
 import { updateGame } from '../../Actions/game-actions.js'
+import {GameStateEnum} from '../../Utils.js';
 
 class HostMainPage extends React.Component {
 
@@ -20,15 +23,42 @@ class HostMainPage extends React.Component {
   }
 
   render() {
-    let content = "";
+    let content = "", stateContent="";
     let game = this.props.game;
 
     if(game){
-      content = (<div>
-                  <Board game={game}/>
-                  <HostCode code={game.gameId}/>
-                  <ListPlayers players={game.players}/>
-                </div>);
+
+      switch(this.props.game.gameState){
+        case GameStateEnum.NOT_STARTED:
+        case GameStateEnum.DISTRIBUTE_ROLE:
+        case GameStateEnum.TEAM_SELECTION:
+        case GameStateEnum.VOTE:
+        case GameStateEnum.MISSION:
+            stateContent = ( <div>
+                              <ListPlayers game={game} players={game.players}/>
+                            </div>);
+        break;
+        case GameStateEnum.VOTE_RESULT:
+          stateContent = ( <div>
+                              <VoteResult game={game}/>
+                            </div>);
+        break;
+        case GameStateEnum.MISSION_RESULT:
+          stateContent = ( <div>
+                              <MissionResult game={game}/>
+                            </div>);
+        break;
+        default:
+        break;
+      }
+      content = ( <div>
+                    <Board game={game}/>
+                    <HostCode code={game.gameId}/>
+                    {stateContent}
+                  </div>);
+
+
+      
     }
     
     return (

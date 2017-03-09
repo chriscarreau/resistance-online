@@ -4,16 +4,16 @@ class PlayerBar extends React.Component {
 
     onPlayerSelected(){
         let ClientAction = {
-            playerId:window.gameOptions.playerId,
+            playerId:this.props.player.playerId,
             gameId:window.gameOptions.gameId,
-            message:"ADD_PLAYER_TEAM"
+            message:"ADD_REMOVE_PLAYER_TEAM"
         }
         window.socket.emit('gameUpdate', ClientAction);
     }
 
   render() {
     return (
-      <div onClick={this.onPlayerSelected} className={this.props.selected ? "player-selected playerBar": "playerBar"}>
+      <div onClick={this.onPlayerSelected.bind(this)} className={this.props.selected ? "player-selected player-bar": "player-bar"}>
         <div>{this.props.player.playerName}</div>
       </div>
     )
