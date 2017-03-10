@@ -84,7 +84,14 @@ class ClientMainPage extends React.Component {
           content = <PageMission game={this.props.game} ></PageMission>
         break;
         case GameStateEnum.MISSION_RESULT:
-          content = <PageVote game={this.props.game} ></PageVote>
+          if(IsPremierJoueur(this.props.game)){
+            content = ( <div>
+                          <button onClick={this.prochaineEtape}>Prochaine étape</button>
+                        </div>);
+          }
+          else{
+            content = "CHECK LE RESULTAT SU'A GROSSE ECRAN";
+          }
         break;
         default:
         break;

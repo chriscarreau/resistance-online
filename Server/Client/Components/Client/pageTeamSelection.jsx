@@ -23,11 +23,7 @@ class PageTeamSelection extends React.Component {
                     </div>
                     {
                     this.props.game.players.map(function(x, i){
-                        let playerBar = "";
-                        if(x !== that.props.player){
-                            playerBar = (  <PlayerBar key={i} selected={IsPlayerInCurrentTeam(x, that.props.game)} player={x}></PlayerBar>)
-                        }
-                        return playerBar;
+                        return (  <PlayerBar key={i} selected={IsPlayerInCurrentTeam(x, that.props.game)} player={x}></PlayerBar>);
                         })
                     }
                     <div>

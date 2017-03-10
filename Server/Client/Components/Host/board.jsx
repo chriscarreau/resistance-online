@@ -1,5 +1,6 @@
 import React from 'react';
 import PastilleMission from './pastilleMission.jsx';
+import {MissionResultEnum} from '../../Utils.js';
 
 class Board extends React.Component {
   render() {
@@ -12,7 +13,21 @@ class Board extends React.Component {
         <div className="missions clearfix">
           {tmpTeamSize.map(function(x, i){
             var color = "white"
-            return <PastilleMission key={i} color={color} isCurrentMission={i == 0} teamSize={x} />
+            let mission = game.missions[i];
+            if (mission){
+              switch(mission.result){
+                case MissionResultEnum.RESISTANCE:
+                  color = "blue"
+                break;
+                case MissionResultEnum.SPY:
+                  color = "red"
+                break;
+                default:
+                  color = "white"
+                break;
+              }
+            }
+            return <PastilleMission key={i} color={color} isCurrentMission={i == game.currentMission} teamSize={x} />
           }
           )}
         </div>
@@ -28,5 +43,9 @@ class Board extends React.Component {
     )
   }
 }
+
+Board.propTypes = {
+  game: React.PropTypes.object
+};
 
 export default Board;

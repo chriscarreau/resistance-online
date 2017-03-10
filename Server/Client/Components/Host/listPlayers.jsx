@@ -10,7 +10,7 @@ class ListPlayers extends React.Component {
 
     if(this.props.players){
         content = this.props.players.map(function(x, i){
-                      return <PlayerCard key={i} player={x} selected={IsPlayerInCurrentTeam(x, that.props.game)} />
+                      return <PlayerCard key={i} player={x} lastLeader={that.props.game.lastLeader === i } selected={IsPlayerInCurrentTeam(x, that.props.game)} />
                   });
     }
     return (

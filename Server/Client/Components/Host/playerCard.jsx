@@ -5,6 +5,7 @@ class PlayerCard extends React.Component {
     let nbMissionsBleu = "";
     let nbMissionsRouge = "";
     let isPlayerLeader = "";
+    let isLastLeader = "";
     let player = this.props.player;
 
     if(player.nbMissionBleu > 0){
@@ -26,6 +27,11 @@ class PlayerCard extends React.Component {
                           Leader
                         </div>);
     }
+    if(this.props.lastLeader){
+      isLastLeader = (<div className="last-leader">
+                        Dernier leader
+                      </div>);
+    }
 
     let content = ( <div className={this.props.selected ? "player-selected player-card" : "player-card"}>
                       <div className="player-name">
@@ -34,6 +40,7 @@ class PlayerCard extends React.Component {
                       {nbMissionsBleu}
                       {nbMissionsRouge}
                       {isPlayerLeader}
+                      {isLastLeader}
                     </div>)
 
     return (
@@ -45,7 +52,8 @@ class PlayerCard extends React.Component {
 
 PlayerCard.propTypes = {
   player: React.PropTypes.object.isRequired,
-  selected: React.PropTypes.bool.isRequired
+  selected: React.PropTypes.bool.isRequired,
+  lastLeader: React.PropTypes.bool
 };
 
 export default PlayerCard;

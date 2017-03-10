@@ -14,6 +14,12 @@ export var RoleEnum = {
     RESISTANCE : 1
 }
 
+export var MissionResultEnum = {
+    NO_RESULT : 0,
+    SPY : 1,
+    RESISTANCE : 2
+}
+
 export function IsPlayerInCurrentTeam(player, game){
     if(game.gameState === GameStateEnum.NOT_STARTED)
         return false;

@@ -86,6 +86,7 @@ Game.prototype.update = function(io, clientAction){
                 else{
                     this.players[this.getCurrentLeader()].isLeader = false;
                     currentMission.voteRejected();
+                    console.log("currentLeader = " + this.getCurrentLeader());
                     this.players[this.getCurrentLeader()].isLeader = true;
                     this.gameState = tools.GameStateEnum.TEAM_SELECTION;
                 }
@@ -110,6 +111,9 @@ Game.prototype.update = function(io, clientAction){
                     this.gameState = tools.GameStateEnum.GAME_OVER;
                 }
                 else{
+                    this.players[this.getCurrentLeader()].isLeader = false;
+                    this.startNewMission();
+                    this.players[this.getCurrentLeader()].isLeader = true;
                     this.gameState = tools.GameStateEnum.TEAM_SELECTION;
                 }
             }
@@ -161,7 +165,7 @@ Game.prototype.removePlayer = function(playerId){
 Game.prototype.startGame = function(io){
     this.nbPlayersTotal = this.players.length;
     this.firstLeader = Math.floor(Math.random()*this.nbPlayersTotal);
-    this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
+    this.lastLeader = (this.firstLeader + 4) % this.nbPlayersTotal;
     //On remplis un tableau dans l'objet Game contenant la grosseur des équipes pour chaque mission, maintenant que tous les joueurs sont présents
     for (var i = 0; i < tools.arrayTeamSize.length; i++) {
         this.teamSizes.push(tools.arrayTeamSize[i][this.nbPlayersTotal-5]);
@@ -231,13 +235,12 @@ Game.prototype.hasEveryoneAcceptedRole = function(){
 }
 
 Game.prototype.startNewMission = function(){
-    var mission = this.missions[this.currentMission]
     this.firstLeader = (this.getCurrentLeader() + 1) % this.nbPlayersTotal;
-    this.lastLeader = (this.firstLeader + 5) % this.nbPlayersTotal;
+    this.lastLeader = (this.firstLeader + 4) % this.nbPlayersTotal;
     this.currentMission++;
 }
 Game.prototype.getCurrentLeader = function(){
-    return this.firstLeader + this.missions[this.currentMission].currentRound;
+    return (this.firstLeader + this.missions[this.currentMission].currentRound) % this.nbPlayersTotal;
 }
 
 Game.prototype.hasATeamWon = function(){

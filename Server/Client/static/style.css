@@ -23,6 +23,7 @@ html, body{
     text-align: center;
     font-size: 1.5REM;
     font-weight: bold;
+    border: solid 1px black;
 }
 
 .mini-pastille {
@@ -31,17 +32,19 @@ html, body{
     display: inline-block;
 }
 
-.red{
-    background-color: red; 
+.mini-pastille.red,
+.pastilleMission.red{
+    background-color: #ff4040; 
 }
 
-.blue{
-    background-color: blue; 
+.mini-pastille.blue,
+.pastilleMission.blue{
+    background-color: #23a7ff; 
 }
 
-.white{
+.mini-pastille.white,
+.pastilleMission.white{
     background-color: white;
-    border: solid 1px black;
 }
 
 .portal-div{
@@ -96,11 +99,11 @@ html, body{
 }
 
 .nb-joueur-resistance{
-    color:blue;
+    color:#23a7ff;
 }
 
 .nb-joueur-espion{
-    color:red;
+    color:#ff4040;
 }
 
 .host-code{
