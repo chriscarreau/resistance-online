@@ -44,6 +44,8 @@ io.on('connection', function(socket){
             return;
         }
         var player = game.getPlayer(options.playerId);
+        console.log(options.playerId);
+        console.log(util.inspect(player));
         if( player === null){
             player = new Player();
             player.playerName = options.playerName
@@ -65,35 +67,15 @@ io.on('connection', function(socket){
         io.to(game.gameId).emit('gameUpdate', game);
     });
 
-    //TODO: ENLEVER et remplacer par 'updateGame' côté client
-    /*
-    socket.on('startGame', function(options){
+    socket.on('reconnect', function(options){
         var game = findGame(options.gameId);
-        game.startGame();
-        for(var joueur of game.spy){
-            io.to(joueur.playerId).emit('role', 'ton rôle est: espion' );
+        if(game === null){
+            console.log('game introuvable');
+            return;
         }
-        for(var joueur of game.resistance){
-            io.to(joueur.playerId).emit('role', 'ton rôle est: resistance' );
-        }
-        console.log('game ' + game.gameId + ' started');
-        console.log(util.inspect(game));
-        console.log('total number of games: ' + games.length);
-        socket.join(game.gameId);
-        io.to(game.hostId).emit('gameUpdate', game);
-    });
-    */
-    //TODO: ENLEVER et remplacer par 'updateGame' côté client
-    socket.on('acceptRole', function(options){
-        var game = findGame(options.gameId);
         var player = game.getPlayer(options.playerId);
-        game.acceptRole(player);
-        if(game.hasEveryoneAcceptedRole()){
-            game.startNewMission();
-            console.log('nouvelle mission dans la game ' + game.gameId);
-            console.log(util.inspect(game));
-        }
     });
+
     socket.on('gameUpdate', function(clientAction){
         var game = findGame(clientAction.gameId);
         game.update(io, clientAction);

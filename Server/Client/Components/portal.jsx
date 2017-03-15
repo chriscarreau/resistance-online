@@ -32,8 +32,9 @@ class Portal extends React.Component {
         window.gameOptions = {
             gameId:         document.querySelector('#roomName').value,
             playerName:     document.querySelector('#playerName').value,
-            playerId:       socket.id
+            playerId:       window.socket.id
         }
+        window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
         this.context.router.push('/client');
   }
 }

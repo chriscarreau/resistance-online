@@ -12,8 +12,34 @@ class ClientMainPage extends React.Component {
 
   componentDidMount() {
     //mettre ici la logique de reconnection
+    if(window.socket.id){
+      this.joinGame();
+    }
+    else {
+      window.socket.on('connect', this.joinGame.bind(this));
+    }
+    
+  }
+
+  joinGame(){
+    let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
+    // console.log("oldGameOptions");
+    // console.log(oldGameOptions);
+    if(!oldGameOptions){
+      this.context.router.push('/');
+      return;
+    }
+    window.gameOptions = oldGameOptions;
     window.socket.emit('joinGame', window.gameOptions);
+    // console.log("window.socket.id");
+    // console.log(window.socket.id);
+    window.gameOptions.playerId = window.socket.id;
     window.socket.on('gameUpdate', this._updateGame.bind(this));
+    // console.log("window.gameOptions");
+    // console.log(window.gameOptions);
+    // console.log("JSON.stringify(window.gameOptions)");
+    // console.log(JSON.stringify(window.gameOptions));
+    window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
   }
 
   _updateGame(game){
@@ -93,6 +119,9 @@ class ClientMainPage extends React.Component {
             content = "CHECK LE RESULTAT SU'A GROSSE ECRAN";
           }
         break;
+        case GameStateEnum.GAME_OVER:
+          window.localStorage.removeItem("gameOptions");
+        break;
         default:
         break;
       }
@@ -110,5 +139,9 @@ const mapStateToProps = function(store) {
     game: store.game
   }
 }
+
+ClientMainPage.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps)(ClientMainPage);
