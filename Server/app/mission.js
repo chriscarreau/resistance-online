@@ -37,7 +37,6 @@ Mission.prototype.isPlayerInTeam = function(playerId){
     }
 }
 
-//J'arrive pas à le faire marcher côté client..... 
 Mission.prototype.isCurrentTeamComplete = function(){
     return this.currentTeam.length === this.teamSize;
 }

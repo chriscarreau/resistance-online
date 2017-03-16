@@ -1,7 +1,7 @@
 var Mission = require('./mission.js');
 var Player = require('./player.js');
 var tools = require('./tools.js');
-const util      = require('util');
+const util = require('util');
 
 function Game(){
     this.gameId;
@@ -20,6 +20,7 @@ function Game(){
     this.gameState = tools.GameStateEnum.NOT_STARTED;
 };
 
+// Méthode principale qui sert à update le gameState
 Game.prototype.update = function(io, clientAction){
     let currentMission = this.missions[this.currentMission];
     let player = this.getPlayer(clientAction.playerId);

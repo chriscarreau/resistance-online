@@ -1,3 +1,5 @@
+//Code que l'on veut partager parmi tous les components
+
 export var GameStateEnum = {
     NOT_STARTED : 0,
     DISTRIBUTE_ROLE : 1,

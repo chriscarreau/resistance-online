@@ -1,3 +1,4 @@
+//Classe pour mettre en commun du code que l'on peut réutiliser partout (genre Enum)
 module.exports = {
     arrayTeamSize: [
         [2,2,2,3,3,3],
