@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "build",
-    "start": "build && serve",
+    "start": "webpack --config webpack.config.js --progress --profile --colors && node index.js",
     "lint": "eslint --ext js --ext jsx src || exit 0"
   },
   "author": "Christophe Carreau-Lacasse",
