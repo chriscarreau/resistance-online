@@ -162,3 +162,30 @@ html, body{
     max-height:200px;
     max-width:100%;
 }
+
+.client-main-page{
+    padding-top:51px;
+}
+
+.status-bar{
+    /*position:relative;*/
+}
+
+.role-div{
+    position:absolute;
+    width:100vw;
+    height:100vh;
+    top:0;
+    left:0;
+    background-color: rgba(255,255,255,0.8);
+    z-index:10000;
+    text-align: center;
+}
+
+.role-div img{
+    width:80%;
+}
+
+.role-div.hidden{
+    display:none;
+}

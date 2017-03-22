@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "build",
+    "build": "webpack --config webpack.config.js --progress --profile --colors",
     "start": "webpack --config webpack.config.js --progress --profile --colors && node index.js",
     "lint": "eslint --ext js --ext jsx src || exit 0"
   },

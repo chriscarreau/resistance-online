@@ -21,19 +21,23 @@ app.get('*', function (request, response){
 
 io.on('connection', function(socket){
     console.log('connection: '+ socket.id);
-
-    socket.on('chat message', function(msg){
-        io.emit('chat message', msg);
-    });
-    socket.on('newGame', function(data){
-        var game = new Game();
-        game.gameId = makeUniqueId();
+    var game;
+    socket.on('hostGame', function(options){
+        if(options.gameId){
+            game = findGame(options.gameId);
+            if(game === null){
+                console.log('game introuvable');
+                socket.emit('gameNotFound');
+                return;
+            }
+        }
+        else{
+            game = new Game();
+            game.gameId = makeUniqueId();
+            games.push(game);
+        }
         game.hostId = socket.id;
-        games.push(game);
-        socket.send(game.gameId);
         io.to(game.hostId).emit('gameUpdate', game);
-        console.log('new game created');
-        console.log(util.inspect(game));
         console.log('total number of games: ' + games.length);
         socket.join(game.gameId);
     });
@@ -41,11 +45,10 @@ io.on('connection', function(socket){
         var game = findGame(options.gameId);
         if(game === null){
             console.log('game introuvable');
+            socket.emit('gameNotFound');
             return;
         }
         var player = game.getPlayer(options.playerId);
-        console.log(options.playerId);
-        console.log(util.inspect(player));
         if( player === null){
             player = new Player();
             player.playerName = options.playerName
@@ -56,28 +59,19 @@ io.on('connection', function(socket){
         }
         player.playerId = socket.id;
         socket.join(game.gameId);
-        io.to(game.hostId).emit('playerJoined', player );
         if(game.players.length == 1){
             game.firstPlayer = player;
-            socket.emit('gameUpdate', game);
-        }
-        if(game.players.length >= 5){
-            io.to(game.players[0].playerId).emit('gameReadyToStart');
         }
         io.to(game.gameId).emit('gameUpdate', game);
     });
 
-    socket.on('reconnect', function(options){
-        var game = findGame(options.gameId);
-        if(game === null){
-            console.log('game introuvable');
-            return;
-        }
-        var player = game.getPlayer(options.playerId);
-    });
-
     socket.on('gameUpdate', function(clientAction){
         var game = findGame(clientAction.gameId);
+        if(game === null){
+            console.log('game introuvable');
+            socket.emit('gameNotFound');
+            return;
+        }
         game.update(io, clientAction);
     });
 });

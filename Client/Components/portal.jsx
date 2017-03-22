@@ -2,6 +2,27 @@ import React from 'react';
 import browserHistory from 'react-router'
 
 class Portal extends React.Component {
+  
+  componentDidMount() {
+    this.reconnect();
+  }
+
+  reconnect(){
+    let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
+    
+    if(!oldGameOptions){
+      //Y'a rien dans le local storage, on est pas dans une game
+      //donc on fait rien et la page de connection s'affiche
+      return;
+    }
+    if(oldGameOptions.isHost){
+      this.context.router.push('/host');
+    }
+    else{
+      this.context.router.push('/client');
+    }
+  }
+
   render() {
     return (
       <div className="portal-div">
@@ -26,16 +47,21 @@ class Portal extends React.Component {
   }
 
   btnCreateGameClick(e) {
+      window.gameOptions = {
+        isHost:         true
+      }
       this.context.router.push('/host');
+      window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
   }
   btnJoinGameClick(e) {
-        window.gameOptions = {
-            gameId:         document.querySelector('#roomName').value,
-            playerName:     document.querySelector('#playerName').value,
-            playerId:       window.socket.id
-        }
-        window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
-        this.context.router.push('/client');
+      window.gameOptions = {
+          gameId:         document.querySelector('#roomName').value,
+          playerName:     document.querySelector('#playerName').value,
+          playerId:       window.socket.id,
+          isHost:         false
+      }
+      window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
+      this.context.router.push('/client');
   }
 }
 

@@ -6,45 +6,45 @@ import PageRole from './pageRole.jsx';
 import PageTeamSelection from './pageTeamSelection.jsx';
 import PageVote from './pageVote.jsx';
 import PageMission from './pageMission.jsx';
+import StatusBar from './statusBar.jsx';
 import {GameStateEnum, GetCurrentJoueur, IsPremierJoueur} from '../../Utils.js';
 
 class ClientMainPage extends React.Component {
 
   componentDidMount() {
-    //mettre ici la logique de reconnection
+    //la logique de reconnection
     if(window.socket.id){
       this.joinGame();
     }
     else {
       window.socket.on('connect', this.joinGame.bind(this));
     }
-    
   }
 
   joinGame(){
     let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
-    // console.log("oldGameOptions");
-    // console.log(oldGameOptions);
     if(!oldGameOptions){
       this.context.router.push('/');
       return;
     }
     window.gameOptions = oldGameOptions;
-    window.socket.emit('joinGame', window.gameOptions);
-    // console.log("window.socket.id");
-    // console.log(window.socket.id);
-    window.gameOptions.playerId = window.socket.id;
     window.socket.on('gameUpdate', this._updateGame.bind(this));
-    // console.log("window.gameOptions");
-    // console.log(window.gameOptions);
-    // console.log("JSON.stringify(window.gameOptions)");
-    // console.log(JSON.stringify(window.gameOptions));
+    window.socket.on('gameNotFound', this._gameNotFound.bind(this));
+    window.socket.emit('joinGame', window.gameOptions);
+    window.gameOptions.playerId = window.socket.id;
     window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
   }
 
   _updateGame(game){
     store.dispatch(updateGame(game));
     console.log(game);
+  }
+
+  _gameNotFound(){
+    //La game ne semble pas exister côté serveur, on ramène au portail
+    console.log('a');
+    window.localStorage.removeItem("gameOptions");
+    this.context.router.push('/');
   }
 
   commencerPartie(){
@@ -66,8 +66,9 @@ class ClientMainPage extends React.Component {
   }
 
   render() {
-    let content = "";
+    let content = "", statusBar = "";
     if(this.props.game){
+      statusBar = <StatusBar player={GetCurrentJoueur(this.props.game)}></StatusBar>;
       switch(this.props.game.gameState){
         case GameStateEnum.NOT_STARTED:
           content = "Votre rôle sera assigné dès que la partie aura commencé";
@@ -127,7 +128,8 @@ class ClientMainPage extends React.Component {
       }
     }
     return (
-        <div>
+        <div className="client-main-page">
+            {statusBar}
             {content}
         </div>
     );

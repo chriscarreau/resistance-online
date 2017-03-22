@@ -12,15 +12,48 @@ import {GameStateEnum} from '../../Utils.js';
 class HostMainPage extends React.Component {
 
   componentDidMount() {
-    window.socket.emit('newGame');
-    //window.socket.on('playerJoined', this._updateGame);
+    //logique de reconnection
+    if(window.socket.id){
+      this.reconnectHost();
+    }
+    else {
+      window.socket.on('connect', this.reconnectHost.bind(this));
+    }
+  }
+
+  reconnectHost(){
+    let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
+    if(!oldGameOptions){
+      //On est pas dans une game, on ramène au portail
+      this.context.router.push('/');
+      return;
+    }
+    window.gameOptions = oldGameOptions;
     window.socket.on('gameUpdate', this._updateGame.bind(this));
+    window.socket.on('gameNotFound', this._gameNotFound.bind(this));
+    window.socket.emit('hostGame', window.gameOptions);
   }
 
   _updateGame(game){
     store.dispatch(updateGame(game));
+
+    if(!window.gameOptions.gameId){
+      //Si on a pas de gameId, on le met dans le localstorage, comme ça il va pouvoir se reconnecter en refreshant la page
+      let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
+      window.gameOptions = oldGameOptions;
+      window.gameOptions.gameId = game.gameId;
+      window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
+    }
+    
     console.log(game);
   }
+
+  _gameNotFound(){
+    //La game ne semble pas exister côté serveur, on ramène au portail
+    window.localStorage.removeItem("gameOptions");
+    this.context.router.push('/');
+  }
+
 
   render() {
     let content = "", stateContent="";
@@ -77,5 +110,9 @@ const mapStateToProps = function(store) {
     game: store.game
   };
 }
+
+HostMainPage.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps)(HostMainPage);
