@@ -8,6 +8,7 @@ var io          = require('socket.io')(http);
 var Game        = require('./game.js');
 var Player      = require('./player.js');
 var Mission     = require('./mission.js');
+var tools       = require('./tools.js');
 const util      = require('util');
 
 //game variables
@@ -73,6 +74,12 @@ io.on('connection', function(socket){
             return;
         }
         game.update(io, clientAction);
+        if(game.gameState === tools.GameStateEnum.GAME_OVER){
+            //La game est fini, on la supprime
+            
+            //force les clients à se déconnecter/revenir au portail
+            io.to(game.gameId).emit('gameNotFound');
+        }
     });
 });
 

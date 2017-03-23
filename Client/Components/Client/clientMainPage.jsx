@@ -42,7 +42,6 @@ class ClientMainPage extends React.Component {
 
   _gameNotFound(){
     //La game ne semble pas exister côté serveur, on ramène au portail
-    console.log('a');
     window.localStorage.removeItem("gameOptions");
     this.context.router.push('/');
   }

@@ -34,7 +34,7 @@ class Portal extends React.Component {
             </div>
             <div className="form-group">
                 <label htmlFor="playerName">Nom d'utilisateur</label>
-                <input type="text" className="form-control" id="playerName" placeholder="Nom d'utilisateur..." maxLength="12"/>
+                <input type="text" className="form-control" id="playerName" placeholder="Nom d'utilisateur..." maxLength="15"/>
             </div>
         </div>
         <div>
@@ -54,14 +54,27 @@ class Portal extends React.Component {
       window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
   }
   btnJoinGameClick(e) {
-      window.gameOptions = {
-          gameId:         document.querySelector('#roomName').value,
-          playerName:     document.querySelector('#playerName').value,
-          playerId:       window.socket.id,
-          isHost:         false
+      if(this.validateInput()){
+        window.gameOptions = {
+            gameId:         document.querySelector('#roomName').value,
+            playerName:     document.querySelector('#playerName').value,
+            playerId:       window.socket.id,
+            isHost:         false
+        }
+        window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
+        this.context.router.push('/client');
       }
-      window.localStorage.setItem("gameOptions", JSON.stringify(window.gameOptions));
-      this.context.router.push('/client');
+      else{
+        //Todo afficher que le gars est dumb
+      }
+  }
+
+  validateInput(){
+    let playerName = document.querySelector('#playerName').value;
+    if(playerName.length < 1 || playerName.length > 15){
+      return false;
+    }
+    return true;
   }
 }
 
