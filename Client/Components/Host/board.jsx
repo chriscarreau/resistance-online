@@ -6,14 +6,12 @@ class Board extends React.Component {
   render() {
     let nbJoueursEquipes = "";
     let game = this.props.game;
-    let tmpTeamSize = [2,3,2,3,3]; 
 
     return (
       <div className="board">
         <div className="missions clearfix">
-          {tmpTeamSize.map(function(x, i){
+          {game.missions.map(function(mission, i){
             var color = "white"
-            let mission = game.missions[i];
             if (mission){
               switch(mission.result){
                 case MissionResultEnum.RESISTANCE:
@@ -27,7 +25,7 @@ class Board extends React.Component {
                 break;
               }
             }
-            return <PastilleMission key={i} color={color} isCurrentMission={i == game.currentMission} teamSize={x} />
+            return <PastilleMission key={i} color={color} isCurrentMission={i == game.currentMission} teamSize={mission.teamSize} />
           }
           )}
         </div>

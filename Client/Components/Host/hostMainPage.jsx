@@ -13,6 +13,7 @@ class HostMainPage extends React.Component {
 
   componentDidMount() {
     //logique de reconnection
+    document.querySelector('body').className = "gameHostBg";
     if(window.socket.id){
       this.reconnectHost();
     }

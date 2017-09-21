@@ -74,7 +74,7 @@ class ClientMainPage extends React.Component {
           if(IsPremierJoueur(this.props.game)){
             if(this.props.game.players.length >= 5){
               content = (<div>
-                          <div>
+                          <div className="instructionText">
                             Il y a présentement {this.props.game.players.length} joueurs
                           </div>
                           <div>
@@ -126,6 +126,7 @@ class ClientMainPage extends React.Component {
         break;
       }
     }
+    content = <div className="mainContent">{content}</div>
     return (
         <div className="client-main-page">
             {statusBar}
