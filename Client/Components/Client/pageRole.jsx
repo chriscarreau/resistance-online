@@ -24,22 +24,19 @@ class PageRole extends React.Component {
                       <div>
                         <img style={{width:"100%"}} src="/images/Bleu.svg"/>
                       </div>
-                      <div>Membre de la résistance!</div>
                     </div>);
       }else{
         espion = ( <div>
                       <div>
                         <img style={{width:"100%"}} src="/images/Rouge.svg"/>
                       </div>
-                      <div>Espion!</div>
                     </div>);
       }
       content = ( <div>
-                      <div>Votre rôle est:</div>
                       {resistance}
                       {espion}
                       <div>
-                        <button onClick={this.accepterRole}>J'ai pris connaissance de mon rôle</button>
+                        <button onClick={this.accepterRole} className="btn btn-primary">J'ai pris connaissance de mon rôle</button>
                       </div>
                     </div>);
 

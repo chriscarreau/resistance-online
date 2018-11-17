@@ -1,3 +1,5 @@
+const util = require('util');
+
 var MissionResultEnum = {
     NO_RESULT : 0,
     SPY : 1,
@@ -49,6 +51,22 @@ Mission.prototype.rejectTeam = function(player){
     addPlayerToArray(this.playerReject, player);
 }
 
+Mission.prototype.cancelVote = function(player){
+    console.log(util.inspect(this));
+    for (let i = this.playerAccept.length - 1; i >= 0; i-- ) {
+        console.log(util.inspect(this.playerAccept[i]));
+        if(player.playerId === this.playerAccept[i].playerId){
+            this.playerAccept.splice(i, 1);
+        }
+    }
+    for (let i = this.playerReject.length - 1; i >= 0; i-- ) {
+        console.log(util.inspect(this.playerAccept[i]));
+        if(player.playerId === this.playerReject[i].playerId){
+            this.playerReject.splice(i, 1);
+        }
+    }
+}
+
 Mission.prototype.hasEveryoneVoted = function(nbTotalPlayers){
     return (this.playerAccept.length + this.playerReject.length >= nbTotalPlayers);
 }
@@ -70,6 +88,20 @@ Mission.prototype.voteSuccess = function(player){
 
 Mission.prototype.voteFail = function(player){
     addPlayerToArray(this.playerVoteFail, player);
+}
+
+Mission.prototype.cancelMissionVote = function(player){
+    console.log(util.inspect(this));
+    for (let i = this.playerVoteSuccess.length - 1; i >= 0; i-- ) {
+        if(player.playerId === this.playerVoteSuccess[i].playerId){
+            this.playerVoteSuccess.splice(i, 1);
+        }
+    }
+    for (let i = this.playerVoteFail.length - 1; i >= 0; i-- ) {
+        if(player.playerId === this.playerVoteFail[i].playerId){
+            this.playerVoteFail.splice(i, 1);
+        }
+    }
 }
 
 Mission.prototype.isMissionComplete = function(){

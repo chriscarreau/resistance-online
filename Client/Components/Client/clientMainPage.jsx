@@ -24,7 +24,8 @@ class ClientMainPage extends React.Component {
   joinGame(){
     let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
     if(!oldGameOptions){
-      this.context.router.push('/');
+      window.location = "/";
+      //this.context.router.push('/');
       return;
     }
     window.gameOptions = oldGameOptions;
@@ -99,11 +100,11 @@ class ClientMainPage extends React.Component {
         case GameStateEnum.VOTE_RESULT:
           if(IsPremierJoueur(this.props.game)){
             content = ( <div>
-                          <button onClick={this.prochaineEtape}>Prochaine étape</button>
+                          <button onClick={this.prochaineEtape} className="btn btn-primary" >Continuer</button>
                         </div>);
           }
           else{
-            content = "CHECK LE RESULTAT SU'A GROSSE ECRAN";
+            content = "Voir le résultat sur l'écran principale";
           }
         break;
         case GameStateEnum.MISSION:
@@ -112,11 +113,11 @@ class ClientMainPage extends React.Component {
         case GameStateEnum.MISSION_RESULT:
           if(IsPremierJoueur(this.props.game)){
             content = ( <div>
-                          <button onClick={this.prochaineEtape}>Prochaine étape</button>
+                          <button onClick={this.prochaineEtape} className="btn btn-primary">Continuer</button>
                         </div>);
           }
           else{
-            content = "CHECK LE RESULTAT SU'A GROSSE ECRAN";
+            content = "Voir le résultat sur l'écran principale";
           }
         break;
         case GameStateEnum.GAME_OVER:
@@ -130,7 +131,9 @@ class ClientMainPage extends React.Component {
     return (
         <div className="client-main-page">
             {statusBar}
-            {content}
+            <div className="main-client-content">
+              {content}
+            </div>
         </div>
     );
   }

@@ -1,8 +1,15 @@
 import React from 'react';
-import PlayerBar from './playerBar.jsx';
+import {GetCurrentJoueur} from '../../Utils.js';
 
 
 class PageVote extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      showVote: false
+    };
+  }
 
   vote(choice){
     let ClientAction = {
@@ -13,28 +20,63 @@ class PageVote extends React.Component {
     window.socket.emit('gameUpdate', ClientAction);
   }
 
-  hasPlayerVoted(mission, playerId){
+  showVote(){
+    this.setState((prevState) => ({
+      showVote: !prevState.showVote
+    }));
+  }
+  
+  hideVote(){
+    this.setState((prevState) => ({
+      showVote: false
+    }));
+  }
+
+  playerVoted(mission, playerId){
     for(let i = 0; i < mission.playerAccept.length; i++){
       if(mission.playerAccept[i].playerId === playerId){
-        return true;
+        return "ACCEPT";
       }
     }
     for(let i = 0; i < mission.playerReject.length; i++){
       if(mission.playerReject[i].playerId === playerId){
-        return true;
+        return "REJECT";
       }
     }
     return false;
   }
 
+  hasEveryoneVoted(mission, game){
+    return (mission.playerAccept.length + mission.playerReject.length === game.players.length);
+  }
+
   render() {
     let content = "";
     let mission = this.props.game.missions[this.props.game.currentMission];
-    if(this.hasPlayerVoted(mission, window.gameOptions.playerId)){
-      content = "En attente des autres joueurs..."
+    let cancelMission = "";
+    let everyoneVoted = "";
+    let isLeader = GetCurrentJoueur(this.props.game).isLeader;
+    let playerVoted = this.playerVoted(mission, window.gameOptions.playerId);
+    if (isLeader) {
+      cancelMission = <button onClick={() => this.vote("CANCEL_MISSION")} className="btn btn-danger">Changer les membres de la mission</button>
+    }
+    if (isLeader && this.hasEveryoneVoted(mission, this.props.game)) {
+      everyoneVoted = <button onClick={() => this.vote("REVEAL_VOTE")} className="btn btn-primary">Afficher le résultat des votes</button>
+    }
+    if (playerVoted) {
+      content = <div>
+                  <div onClick={this.hideVote.bind(this)} className={(this.state.showVote ? "" : "hidden") + " vote-div"}>
+                    {playerVoted === "ACCEPT" ? <img className="img-show-vote" src="/images/Checkmark.png"/> : <img className="img-show-vote" src="/images/Reject.png"/>}
+                    <button onClick={() => this.vote("CANCEL_VOTE")} className="btn btn-danger">Changer mon vote</button>
+                  </div>
+                  En attente des autres joueurs...
+                  <button onClick={() => this.showVote()} className="btn btn-secondary">Voir mon vote</button>
+                  {everyoneVoted}
+                </div>
     }
     else{
       content = ( <div>
+                      {cancelMission}
                       <div>
                         <div onClick={() => this.vote("VOTE_ACCEPT")} className="boutton-vote-background" >
                           <img src="/images/Checkmark.png"/>

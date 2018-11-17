@@ -1,21 +1,19 @@
 import React from 'react';
-import PlayerCard from './playerCard.jsx';
-import {IsPlayerInCurrentTeam} from '../../Utils.js';
+import VoteResultCard from './voteResultCard';
 
 class VoteResult extends React.Component {
 
   render() {
     let content = "";
-
-    content = ( <div>
-                    <div className="col-xs-12"><h2>Résultat du vote</h2></div>
-                    <div className="col-xs-5">
-                        {this.props.game.missions[this.props.game.currentMission].playerAccept.length} Accepté(s)
-                    </div>
-                    <div className="col-xs-2"><h2>VS</h2></div>
-                    <div className="col-xs-5">
-                        {this.props.game.missions[this.props.game.currentMission].playerReject.length} Refusé(s)
-                    </div>
+    let resultatPositif = this.props.game.missions[this.props.game.currentMission].playerAccept.map(function(x, i){
+                              return <VoteResultCard key={i} accepted={true} />
+                          });
+    let resultatNegatif = this.props.game.missions[this.props.game.currentMission].playerReject.map(function(x, i){
+                              return <VoteResultCard key={i} accepted={false} />
+                          });
+    content = ( <div  className="result-list clearfix">
+                    {resultatPositif}
+                    {resultatNegatif}
                 </div>);
     
     return (

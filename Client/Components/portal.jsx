@@ -56,7 +56,7 @@ class Portal extends React.Component {
   btnJoinGameClick(e) {
       if(this.validateInput()){
         window.gameOptions = {
-            gameId:         document.querySelector('#roomName').value,
+            gameId:         document.querySelector('#roomName').value.toUpperCase(),
             playerName:     document.querySelector('#playerName').value,
             playerId:       window.socket.id,
             isHost:         false

@@ -51,6 +51,11 @@ io.on('connection', function(socket){
         }
         var player = game.getPlayer(options.playerId);
         if( player === null){
+            if (game.gameState !== tools.GameStateEnum.NOT_STARTED) {
+                console.log('game already started, can\'t join you bozo');
+                socket.emit('gameNotFound');
+                return;
+            }
             player = new Player();
             player.playerName = options.playerName
             game.addPlayer(player);

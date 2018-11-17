@@ -64,15 +64,23 @@ Game.prototype.update = function(io, clientAction){
             }            
             break;
         case tools.GameStateEnum.VOTE:
-            if(clientAction.message === 'VOTE_ACCEPT'){
+            if (clientAction.message === 'CANCEL_MISSION') {
+                currentMission.playerAccept = [];
+                currentMission.playerReject = [];
+                this.gameState = tools.GameStateEnum.TEAM_SELECTION;
+                break;
+            }
+            else if (clientAction.message === 'CANCEL_VOTE'){
+                currentMission.cancelVote(player);
+            }
+            else if(clientAction.message === 'VOTE_ACCEPT'){
                 currentMission.acceptTeam(player);
             }
             else if(clientAction.message === 'VOTE_REJECT'){
                 currentMission.rejectTeam(player);
             }
-        
             //Si tout le monde a voté, on passe au résultat
-            if(currentMission.hasEveryoneVoted(this.nbPlayersTotal)){
+            else if(clientAction.message === 'REVEAL_VOTE' && currentMission.hasEveryoneVoted(this.nbPlayersTotal)){
                 this.gameState = tools.GameStateEnum.VOTE_RESULT;
             }
             break;
@@ -94,13 +102,23 @@ Game.prototype.update = function(io, clientAction){
             }
             break;
         case tools.GameStateEnum.MISSION:
-            if(clientAction.message === 'VOTE_SUCCESS'){
+            if (clientAction.message === 'CANCEL_MISSION') {
+                this.players[this.getCurrentLeader()].isLeader = false;
+                currentMission.voteRejected();
+                this.players[this.getCurrentLeader()].isLeader = true;
+                this.gameState = tools.GameStateEnum.TEAM_SELECTION;
+                break;
+            }
+            else if (clientAction.message === 'CANCEL_VOTE'){
+                currentMission.cancelMissionVote(player);
+            }
+            else if(clientAction.message === 'VOTE_SUCCESS'){
                 currentMission.voteSuccess(player);
             }
             else if(clientAction.message === 'VOTE_FAIL'){
                 currentMission.voteFail(player);
             }
-            if(currentMission.isMissionComplete(this.nbPlayersTotal)){
+            else if(clientAction.message === 'REVEAL_MISSION' && currentMission.isMissionComplete(this.nbPlayersTotal)){
                 this.missions[this.currentMission].getMissionResult();
                 this.gameState = tools.GameStateEnum.MISSION_RESULT;
             }
@@ -126,7 +144,7 @@ Game.prototype.update = function(io, clientAction){
         default:
             break;
     }
-    console.log(util.inspect(this));
+    //console.log(util.inspect(this));
     io.to(this.gameId).emit('gameUpdate', this);
 }
 Game.prototype.resetGame = function(){
