@@ -1,5 +1,5 @@
 import React from 'react';
-import {IsPlayerInCurrentTeam, GetCurrentJoueur} from '../../Utils.js';
+import {IsPlayerInCurrentTeam, GetCurrentJoueur, HasPlayerVoted} from '../../Utils.js';
 
 
 class PageMission extends React.Component {
@@ -32,24 +32,9 @@ class PageMission extends React.Component {
     }));
   }
 
-  playerVoted(mission, playerId){
-    for(let i = 0; i < mission.playerVoteSuccess.length; i++){
-      if(mission.playerVoteSuccess[i].playerId === playerId){
-        return "SUCCESS";
-      }
-    }
-    for(let i = 0; i < mission.playerVoteFail.length; i++){
-      if(mission.playerVoteFail[i].playerId === playerId){
-        return "FAIL";
-      }
-    }
-    return false;
-  }
-
-  hasEveryoneVoted(mission, game){
+  hasEveryoneVoted(mission){
     return (mission.playerVoteSuccess.length + mission.playerVoteFail.length === mission.teamSize);
   }
-
 
   render() {
     let content = "";
@@ -57,12 +42,12 @@ class PageMission extends React.Component {
     let cancelMission = "";
     let everyoneVoted = "";
     let isLeader = GetCurrentJoueur(this.props.game).isLeader;
-    let playerVoted = this.playerVoted(mission, window.gameOptions.playerId);
+    let playerVoted = HasPlayerVoted(this.props.game, window.gameOptions.playerId);
     //S'assurer qu'on n'est pas dans le dernier round, car quand on cancel on augmente le leader
     if (isLeader && mission.currentRound !== 4) {
       cancelMission = <button onClick={() => this.vote("CANCEL_MISSION")} className="btn btn-danger">Annuler la mission et changer de leader</button>
     }
-    if (isLeader && this.hasEveryoneVoted(mission, this.props.game)) {
+    if (isLeader && this.hasEveryoneVoted(mission)) {
       everyoneVoted = <button onClick={() => this.vote("REVEAL_MISSION")} className="btn btn-primary">Afficher le résultat de la mission</button>
     }
 
