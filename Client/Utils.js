@@ -35,6 +35,21 @@ export function IsPlayerInCurrentTeam(player, game){
     return false;
 }
 
+export function HasPlayerVoted(game, playerId){
+    let mission = game.missions[game.currentMission];
+    for(let i = 0; i < mission.playerVoteSuccess.length; i++){
+        if(mission.playerVoteSuccess[i].playerId === playerId){
+          return "SUCCESS";
+        }
+      }
+      for(let i = 0; i < mission.playerVoteFail.length; i++){
+        if(mission.playerVoteFail[i].playerId === playerId){
+          return "FAIL";
+        }
+      }
+      return false;
+}
+
 export function GetCurrentJoueur(game){
     return GetPlayer(game, window.gameOptions.playerId);
 }
