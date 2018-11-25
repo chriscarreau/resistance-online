@@ -26,7 +26,8 @@ class HostMainPage extends React.Component {
     let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
     if(!oldGameOptions){
       //On est pas dans une game, on ramène au portail
-      this.context.router.push('/');
+      window.location.href = "/";
+      //this.context.router.push('/');
       return;
     }
     window.gameOptions = oldGameOptions;
@@ -52,7 +53,17 @@ class HostMainPage extends React.Component {
   _gameNotFound(){
     //La game ne semble pas exister côté serveur, on ramène au portail
     window.localStorage.removeItem("gameOptions");
-    this.context.router.push('/');
+
+    window.location.href = "/";
+    //this.context.router.push('/');
+  }
+
+  deleteGame(){
+    window.socket.emit('deleteGame', window.gameOptions);
+    window.localStorage.removeItem("gameOptions");
+
+    window.location.href = "/";
+    //this.context.router.push('/');
   }
 
 
@@ -89,10 +100,10 @@ class HostMainPage extends React.Component {
                     <Board game={game}/>
                     <HostCode code={game.gameId}/>
                     {stateContent}
+                    <div onClick={() => this.deleteGame()} className="div-boutton-quitter">
+                      <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </div>
                   </div>);
-
-
-      
     }
     
     return (

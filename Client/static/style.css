@@ -314,3 +314,13 @@ body.gameHostBg{
     justify-content: center; /* align horizontal */
     align-items: center; /* align vertical */
 }
+
+.div-boutton-quitter{
+    position: absolute;
+    bottom:20px;
+    right:20px;
+    width:30px;
+    height:30px;
+    border-radius: 50%;
+    background: #9a9a9a;
+}
