@@ -1,5 +1,5 @@
 import React from 'react';
-import {GetCurrentJoueur} from '../../Utils.js';
+import {GetCurrentJoueur, HasPlayerVoted} from '../../Utils.js';
 
 
 class PageVote extends React.Component {
@@ -32,20 +32,6 @@ class PageVote extends React.Component {
     }));
   }
 
-  playerVoted(mission, playerId){
-    for(let i = 0; i < mission.playerAccept.length; i++){
-      if(mission.playerAccept[i].playerId === playerId){
-        return "ACCEPT";
-      }
-    }
-    for(let i = 0; i < mission.playerReject.length; i++){
-      if(mission.playerReject[i].playerId === playerId){
-        return "REJECT";
-      }
-    }
-    return false;
-  }
-
   hasEveryoneVoted(mission, game){
     return (mission.playerAccept.length + mission.playerReject.length === game.players.length);
   }
@@ -56,7 +42,7 @@ class PageVote extends React.Component {
     let cancelMission = "";
     let everyoneVoted = "";
     let isLeader = GetCurrentJoueur(this.props.game).isLeader;
-    let playerVoted = this.playerVoted(mission, window.gameOptions.playerId);
+    let playerVoted = HasPlayerVoted(this.props.game, window.gameOptions.playerId);
     if (isLeader) {
       cancelMission = <button onClick={() => this.vote("CANCEL_MISSION")} className="btn btn-danger">Changer les membres de la mission</button>
     }

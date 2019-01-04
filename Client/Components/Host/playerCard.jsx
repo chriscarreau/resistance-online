@@ -6,6 +6,7 @@ class PlayerCard extends React.Component {
     let nbMissionsRouge = "";
     let isPlayerLeader = "";
     let isLastLeader = "";
+    let playerVoted = "";
     let player = this.props.player;
 
     if(player.nbMissionBleu > 0){
@@ -33,9 +34,14 @@ class PlayerCard extends React.Component {
                       </div>);
     }
 
+    if (this.props.hasVoted){
+      playerVoted = (<span className="player-voted glyphicon glyphicon-edit"/>);
+    }
+
     let content = ( <div className={this.props.selected ? "player-selected player-card" : "player-card"}>
                       <div className="player-name">
                         {player.playerName}
+                        {playerVoted}
                       </div>
                       {nbMissionsBleu}
                       {nbMissionsRouge}
@@ -53,6 +59,7 @@ class PlayerCard extends React.Component {
 PlayerCard.propTypes = {
   player: React.PropTypes.object.isRequired,
   selected: React.PropTypes.bool.isRequired,
+  hasVoted: React.PropTypes.bool.isRequired,
   lastLeader: React.PropTypes.bool
 };
 

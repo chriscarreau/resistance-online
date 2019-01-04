@@ -36,18 +36,34 @@ export function IsPlayerInCurrentTeam(player, game){
 }
 
 export function HasPlayerVoted(game, playerId){
-    let mission = game.missions[game.currentMission];
-    for(let i = 0; i < mission.playerVoteSuccess.length; i++){
-        if(mission.playerVoteSuccess[i].playerId === playerId){
-          return "SUCCESS";
+    if (game.missions.length > 0){
+        let mission = game.missions[game.currentMission];
+        if (game.gameState === GameStateEnum.VOTE){
+            for(let i = 0; i < mission.playerAccept.length; i++){
+                if(mission.playerAccept[i].playerId === playerId){
+                    return "ACCEPT";
+                }
+            }
+            for(let i = 0; i < mission.playerReject.length; i++){
+                if(mission.playerReject[i].playerId === playerId){
+                    return "REJECT";
+                }
+            }
         }
-      }
-      for(let i = 0; i < mission.playerVoteFail.length; i++){
-        if(mission.playerVoteFail[i].playerId === playerId){
-          return "FAIL";
+        else if (game.gameState === GameStateEnum.MISSION){
+            for(let i = 0; i < mission.playerVoteSuccess.length; i++){
+                if(mission.playerVoteSuccess[i].playerId === playerId){
+                    return "SUCCESS";
+                }
+            }
+            for(let i = 0; i < mission.playerVoteFail.length; i++){
+                if(mission.playerVoteFail[i].playerId === playerId){
+                    return "FAIL";
+                }
+            }
         }
-      }
-      return false;
+    }
+    return false;
 }
 
 export function GetCurrentJoueur(game){

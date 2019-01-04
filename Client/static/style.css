@@ -199,6 +199,10 @@ body.gameHostBg{
     background-color: #ffed9a;
 }
 
+.player-voted{
+    margin-left: 5px;
+}
+
 .boutton-mission-background,
 .boutton-vote-background{
     padding: 20px;
