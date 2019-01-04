@@ -24,7 +24,7 @@ class ClientMainPage extends React.Component {
   joinGame(){
     let oldGameOptions = JSON.parse(window.localStorage.getItem("gameOptions"));
     if(!oldGameOptions){
-      window.location = "/";
+      window.location.href = "/";
       //this.context.router.push('/');
       return;
     }
@@ -44,7 +44,7 @@ class ClientMainPage extends React.Component {
   _gameNotFound(){
     //La game ne semble pas exister côté serveur, on ramène au portail
     window.localStorage.removeItem("gameOptions");
-    this.context.router.push('/');
+    window.location.href = "/";
   }
 
   commencerPartie(){

@@ -80,10 +80,23 @@ io.on('connection', function(socket){
         }
         game.update(io, clientAction);
         if(game.gameState === tools.GameStateEnum.GAME_OVER){
-            //La game est fini, on la supprime
-            
             //force les clients à se déconnecter/revenir au portail
             io.to(game.gameId).emit('gameNotFound');
+            //La game est fini, on la supprime
+            deleteGame(game.gameId);
+        }
+    });
+    socket.on('deleteGame', function(clientAction){
+        var game = findGame(clientAction.gameId);
+        if(game === null){
+            console.log('game introuvable');
+            socket.emit('gameNotFound');
+            return;
+        }
+        else {
+            console.log("on delete la game: " + game.gameId);
+            deleteGame(game.gameId);
+            console.log(util.inspect(games));
         }
     });
 });
@@ -99,6 +112,18 @@ function findGame(gameId){
         }
     }
     return null;
+}
+
+function deleteGame(gameId) {
+    console.log("gameId: " + gameId);
+    console.log("gamesLength: " + games.length);
+    for (let i = games.length - 1; i >= 0; i-- ) {
+        console.log(games[i].gameId); 
+        if(games[i].gameId === gameId){
+            console.log("on a trouvé la game, on la delete");
+            games.splice(i, 1);
+        }
+    }
 }
 
 function makeUniqueId()
