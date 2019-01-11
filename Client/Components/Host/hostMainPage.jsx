@@ -72,29 +72,20 @@ class HostMainPage extends React.Component {
     let game = this.props.game;
 
     if(game){
-
       switch(this.props.game.gameState){
         case GameStateEnum.NOT_STARTED:
         case GameStateEnum.DISTRIBUTE_ROLE:
         case GameStateEnum.TEAM_SELECTION:
         case GameStateEnum.VOTE:
         case GameStateEnum.MISSION:
-            stateContent = ( <div>
-                              <ListPlayers game={game} players={game.players}/>
-                            </div>);
-        break;
+          stateContent = <ListPlayers game={game} players={game.players}/>;
+          break;
         case GameStateEnum.VOTE_RESULT:
-          stateContent = ( <div>
-                              <VoteResult game={game}/>
-                            </div>);
-        break;
+          stateContent = <VoteResult game={game}/>;
+          break;
         case GameStateEnum.MISSION_RESULT:
-          stateContent = ( <div>
-                              <MissionResult game={game}/>
-                            </div>);
-        break;
-        default:
-        break;
+          stateContent = <MissionResult game={game}/>;
+          break;
       }
       content = ( <div>
                     <Board game={game}/>

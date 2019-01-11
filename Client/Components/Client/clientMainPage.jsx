@@ -78,9 +78,7 @@ class ClientMainPage extends React.Component {
                           <div className="instructionText">
                             Il y a présentement {this.props.game.players.length} joueurs
                           </div>
-                          <div>
-                            <button onClick={this.commencerPartie} className="btn btn-primary">Commencer la partie!</button>
-                          </div>
+                          <button onClick={this.commencerPartie} className="btn btn-primary">Commencer la partie!</button>
                         </div>);
             }
             else{

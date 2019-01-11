@@ -90,6 +90,10 @@ body.gameHostBg{
     padding: 20px;
 }
 
+.list-players{
+    margin-top: 65px;
+}
+
 .missions{
     display: inline-block;
     margin:0 auto;
