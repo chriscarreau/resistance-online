@@ -59,7 +59,7 @@ class PlayerCard extends React.Component {
 PlayerCard.propTypes = {
   player: React.PropTypes.object.isRequired,
   selected: React.PropTypes.bool.isRequired,
-  hasVoted: React.PropTypes.any.isRequired,
+  hasVoted: React.PropTypes.bool,
   lastLeader: React.PropTypes.bool
 };
 
