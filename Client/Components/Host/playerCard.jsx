@@ -34,7 +34,7 @@ class PlayerCard extends React.Component {
                       </div>);
     }
 
-    if (this.props.hasVoted){
+    if (this.props.hasVoted != null){
       playerVoted = (<span className="player-voted glyphicon glyphicon-edit"/>);
     }
 
@@ -59,7 +59,7 @@ class PlayerCard extends React.Component {
 PlayerCard.propTypes = {
   player: React.PropTypes.object.isRequired,
   selected: React.PropTypes.bool.isRequired,
-  hasVoted: React.PropTypes.bool.isRequired,
+  hasVoted: React.PropTypes.any.isRequired,
   lastLeader: React.PropTypes.bool
 };
 

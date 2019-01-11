@@ -49,10 +49,10 @@ class PageVote extends React.Component {
     if (isLeader && this.hasEveryoneVoted(mission, this.props.game)) {
       everyoneVoted = <button onClick={() => this.vote("REVEAL_VOTE")} className="btn btn-primary">Afficher le résultat des votes</button>
     }
-    if (playerVoted) {
+    if (playerVoted != null) {
       content = <div>
                   <div onClick={this.hideVote.bind(this)} className={(this.state.showVote ? "" : "hidden") + " vote-div"}>
-                    {playerVoted === "ACCEPT" ? <img className="img-show-vote" src="/images/Checkmark.png"/> : <img className="img-show-vote" src="/images/Reject.png"/>}
+                    {playerVoted === true ? <img className="img-show-vote" src="/images/Checkmark.png"/> : <img className="img-show-vote" src="/images/Reject.png"/>}
                     <button onClick={() => this.vote("CANCEL_VOTE")} className="btn btn-danger">Changer mon vote</button>
                   </div>
                   En attente des autres joueurs...

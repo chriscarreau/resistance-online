@@ -58,10 +58,10 @@ class PageMission extends React.Component {
                   {everyoneVoted}
                 </div>
     }
-    else if(playerVoted){
+    else if(playerVoted != null){
       content = <div>
-                  <div onClick={this.hideVote.bind(this)} className={(playerVoted === "SUCCESS" ? "success" : "fail") + (this.state.showVote ? "" : " hidden") + " vote-div"}>
-                    {playerVoted === "SUCCESS" ? <img className="img-show-vote" src="/images/Success.png"/> : <img className="img-show-vote" src="/images/Reject.png"/>}
+                  <div onClick={this.hideVote.bind(this)} className={(playerVoted === true ? "success" : "fail") + (this.state.showVote ? "" : " hidden") + " vote-div"}>
+                    {playerVoted === true ? <img className="img-show-vote" src="/images/Success.png"/> : <img className="img-show-vote" src="/images/Reject.png"/>}
                     <button onClick={() => this.vote("CANCEL_VOTE")} className="btn btn-danger">Changer mon vote</button>
                   </div>
                   En attente des autres joueurs de la mission...

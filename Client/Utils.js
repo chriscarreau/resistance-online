@@ -36,34 +36,43 @@ export function IsPlayerInCurrentTeam(player, game){
 }
 
 export function HasPlayerVoted(game, playerId){
-    if (game.missions.length > 0){
+    if (game.missions.length > 0 && game.playerRoleAccepte.length > 0){
         let mission = game.missions[game.currentMission];
-        if (game.gameState === GameStateEnum.VOTE){
-            for(let i = 0; i < mission.playerAccept.length; i++){
-                if(mission.playerAccept[i].playerId === playerId){
-                    return "ACCEPT";
+        switch (game.gameState){
+            case GameStateEnum.DISTRIBUTE_ROLE:
+                for(let i = 0; i < game.playerRoleAccepte.length; i++){
+                    if(game.playerRoleAccepte[i].playerId === playerId){
+                        return true;
+                    }
                 }
-            }
-            for(let i = 0; i < mission.playerReject.length; i++){
-                if(mission.playerReject[i].playerId === playerId){
-                    return "REJECT";
+                break;
+            case GameStateEnum.VOTE:
+                for(let i = 0; i < mission.playerAccept.length; i++){
+                    if(mission.playerAccept[i].playerId === playerId){
+                        return true;
+                    }
                 }
-            }
-        }
-        else if (game.gameState === GameStateEnum.MISSION){
-            for(let i = 0; i < mission.playerVoteSuccess.length; i++){
-                if(mission.playerVoteSuccess[i].playerId === playerId){
-                    return "SUCCESS";
+                for(let i = 0; i < mission.playerReject.length; i++){
+                    if(mission.playerReject[i].playerId === playerId){
+                        return false;
+                    }
                 }
-            }
-            for(let i = 0; i < mission.playerVoteFail.length; i++){
-                if(mission.playerVoteFail[i].playerId === playerId){
-                    return "FAIL";
+                break;
+            case GameStateEnum.MISSION:
+                for(let i = 0; i < mission.playerVoteSuccess.length; i++){
+                    if(mission.playerVoteSuccess[i].playerId === playerId){
+                        return true;
+                    }
                 }
-            }
+                for(let i = 0; i < mission.playerVoteFail.length; i++){
+                    if(mission.playerVoteFail[i].playerId === playerId){
+                        return false;
+                    }
+                }
+                break;
         }
     }
-    return false;
+    return null;
 }
 
 export function GetCurrentJoueur(game){
