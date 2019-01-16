@@ -237,8 +237,14 @@ body.gameHostBg{
     padding-top:51px;
 }
 
-.status-bar{
-    /*position:relative;*/
+#nav-collapse li{
+    margin-left:10px;
+    text-align: center;
+}
+
+#nav-collapse li:hover{
+    background-color: #dddddd;
+    cursor: pointer;
 }
 
 .vote-div
