@@ -338,3 +338,15 @@ body.gameHostBg{
     border-radius: 50%;
     background: #9a9a9a;
 }
+
+.spy-reveal-bar {
+    text-align: left;
+    margin: 10px;
+    background-color: #fbaeae;
+    padding: 10px;
+}
+
+.spy-reveal-bar img{
+    margin-right: 10px;
+    width:30px;
+}

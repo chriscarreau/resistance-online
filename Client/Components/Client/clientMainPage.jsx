@@ -87,7 +87,7 @@ class ClientMainPage extends React.Component {
           }
         break;
         case GameStateEnum.DISTRIBUTE_ROLE:
-          content = <PageRole player={GetCurrentJoueur(this.props.game)}></PageRole>
+          content = <PageRole player={GetCurrentJoueur(this.props.game)} spies={this.props.game.spy}></PageRole>
         break;
         case GameStateEnum.TEAM_SELECTION:
           content = <PageTeamSelection player={GetCurrentJoueur(this.props.game)} game={this.props.game}></PageTeamSelection>
