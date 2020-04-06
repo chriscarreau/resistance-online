@@ -1,4 +1,4 @@
-var gameport    = process.env.PORT || 4004;
+var gameport    = process.env.PORT || 8080;
 var UUID        = require('node-uuid');
 var path        = require('path');
 var express     = require('express');
