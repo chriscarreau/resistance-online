@@ -4,20 +4,7 @@ var tools = require('./tools.js');
 const util = require('util');
 
 function Game(){
-    this.gameId;
-    this.firstPlayer = {};
-    this.players = [];
-    this.spy = [];
-    this.resistance = [];
-    this.missions = [];
-    this.currentMission = 0;
-    this.firstLeader = 0;
-    this.lastLeader = 0;
-    this.nbPlayersTotal = 0;
-    this.playerRoleAccepte = [];
-    this.teamSizes = [];
-    this.hostId;
-    this.gameState = tools.GameStateEnum.NOT_STARTED;
+    this.init();
 };
 
 // Méthode principale qui sert à update le gameState
@@ -138,7 +125,7 @@ Game.prototype.update = function(io, clientAction){
             }
             break;
         case tools.GameStateEnum.GAME_OVER:
-            this.resetGame();
+            this.init();
             break;
     
         default:
@@ -147,7 +134,13 @@ Game.prototype.update = function(io, clientAction){
     //console.log(util.inspect(this));
     io.to(this.gameId).emit('gameUpdate', this);
 }
-Game.prototype.resetGame = function(){
+Game.prototype.init = function(){
+    this.gameId;
+    this.firstPlayer = {};
+    this.players = [];
+    this.nbPlayersTotal = 0;
+    this.teamSizes = [];
+    this.hostId;
     this.spy = [];
     this.resistance = [];
     this.missions = [];
@@ -156,7 +149,6 @@ Game.prototype.resetGame = function(){
     this.lastLeader = 0;
     this.playerRoleAccepte = [];
     this.gameState = tools.GameStateEnum.NOT_STARTED;
-    //TODO: Reset players (genre isLeader, hasAcceptedRole)
 }
 
 Game.prototype.getPlayer = function(playerId){
@@ -206,12 +198,14 @@ Game.prototype.startGame = function(io){
     //envoie un message a tous les joueurs avec leurs rôles
     for(var joueur of this.spy){
         joueur.role = tools.RoleEnum.SPY;
-        io.to(joueur.playerId).emit('role', 'ton rôle est: espion' );
+        io.to(joueur.playerId).emit('role', 'Ton rôle est: Espion' );
     }
     for(var joueur of this.resistance){
+        // TODO: Option de désactiver le module Assassin
         joueur.role = tools.RoleEnum.RESISTANCE;
-        io.to(joueur.playerId).emit('role', 'ton rôle est: resistance' );
-    }
+        const commandantRole = joueur.isCommander ? ' (Commandant)' : '';
+        io.to(joueur.playerId).emit('role', 'Ton rôle est: Resistance' + commandantRole );
+    }   
     io.to(this.gameId).emit('gameUpdate', this);
 }
 
@@ -242,6 +236,14 @@ Game.prototype.assignRoles = function(){
             this.resistance.push(shuffledArray[i]);
         }
     }
+    
+    this.assignCommander();
+}
+
+Game.prototype.assignCommander = function() {
+    // first player in the resistance is the commander
+    const player = this.resistance[0];
+    player.isCommander = true;
 }
 
 Game.prototype.acceptRole = function(player){

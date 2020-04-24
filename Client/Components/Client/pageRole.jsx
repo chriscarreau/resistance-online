@@ -34,10 +34,10 @@ class PageRole extends React.Component {
     }
     else{
       imgRole = this.props.player.role === RoleEnum.RESISTANCE ? "/images/Bleu.svg" : "/images/Rouge.svg";
-      if (this.props.player.role === RoleEnum.SPY) {
-        otherSpies = this.props.spies.map(function(spy, i){
-          return (  <SpyRevealBar spy={spy}/>);
-          })
+      if (this.props.player.role === RoleEnum.SPY || this.props.player.isCommander) {
+        otherSpies = this.props.spies.map(function(spy) {
+          return (<SpyRevealBar spy={spy}/>);
+        })
       }
       content = ( <div>
                       <button onClick={this.showHideRole} className={(this.state.showRole ? "hidden" : "") + " btn btn-secondary"}>Afficher mon rôle</button>
