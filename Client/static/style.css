@@ -4,8 +4,7 @@ html, body{
 }
 
 body.gameHostBg{
-    /*background: url(/images/bg.svg) no-repeat center center fixed;*/
-    background: url(/images/rvsb.jpg) no-repeat center center fixed;
+    background: url(/images/cyberpunk.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -30,6 +29,10 @@ body.gameHostBg{
     font-size: 1.5REM;
     font-weight: bold;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.24);
+}
+
+.pastilleMission.active {
+    box-shadow: 0 0 10px 8px #fff700;
 }
 
 .mini-pastille {
@@ -107,6 +110,10 @@ body.gameHostBg{
 }
 .nb-joueurs{
     left:5px;
+    color:#ddd;
+    background-color: rgba(0,0,0,0.50);
+    border-radius: 5px;
+    padding: 0 4px;
 }
 .nb-joueurs-equipes{
     right:5px;
@@ -114,10 +121,16 @@ body.gameHostBg{
 
 .nb-joueur-resistance{
     color:#23a7ff;
+    background-color: rgba(0,0,0,0.50);
+    border-radius: 5px;
+    padding: 0 4px;
 }
 
 .nb-joueur-espion{
     color:#ff4040;
+    background-color: rgba(0,0,0,0.50);
+    border-radius: 5px;
+    padding: 0 4px;
 }
 
 .host-code{
@@ -349,4 +362,10 @@ body.gameHostBg{
 .spy-reveal-bar img{
     margin-right: 10px;
     width:30px;
+}
+
+.metal-background {
+    /* background: #a7a7a7; */
+    background: url(./images/metal.png) repeat;
+    border: groove 1px #a7a7a7;
 }

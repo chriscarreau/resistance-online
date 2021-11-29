@@ -15,7 +15,7 @@ class PageVote extends React.Component {
     let ClientAction = {
         playerId: window.gameOptions.playerId,
         gameId: window.gameOptions.gameId,
-        message:choice
+        action:choice
     }
     window.socket.emit('gameUpdate', ClientAction);
   }

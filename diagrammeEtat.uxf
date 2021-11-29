@@ -1,292 +1,34 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.2">
-  <zoom_level>8</zoom_level>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>72</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>first player menu</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>168</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>GameStart</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>32</y>
-      <w>112</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-everybody's not in...</panel_attributes>
-    <additional_attributes>10.0;50.0;10.0;20.0;120.0;20.0;120.0;70.0;70.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>96</y>
-      <w>96</w>
-      <h>88</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-everybody's in!</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>192</y>
-      <w>24</w>
-      <h>88</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>264</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>GetRole</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>288</y>
-      <w>232</w>
-      <h>128</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLUseCase</id><coordinates><x>300</x><y>70</y><w>120</w><h>40</h></coordinates><panel_attributes>first player menu</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>160</y><w>120</w><h>40</h></coordinates><panel_attributes>GameStart</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>0</y><w>170</w><h>110</h></coordinates><panel_attributes>lt=-&gt;&gt;
+everybody's not in...</panel_attributes><additional_attributes>10;70;10;20;150;20;150;90;70;90</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>100</y><w>110</w><h>80</h></coordinates><panel_attributes>lt=-&gt;&gt;
+everybody's in!</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>190</y><w>30</w><h>70</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>10;10;10;50</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>240</y><w>120</w><h>40</h></coordinates><panel_attributes>GetRole</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>270</y><w>260</w><h>100</h></coordinates><panel_attributes>lt=-&gt;&gt;
 tout le monde a indiqué avoir vu son rôle
-(on fait le "tout le monde ferme les yeux...")</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>400</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>TeamSelection</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>424</y>
-      <w>80</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-team choisit</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>488</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>Vote</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>352</x>
-      <y>408</y>
-      <w>184</w>
-      <h>200</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-Vote non majoritaire</panel_attributes>
-    <additional_attributes>10.0;230.0;90.0;230.0;90.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>512</y>
-      <w>24</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>576</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>RésultatVote</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>592</y>
-      <w>104</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-Vote majoritaire</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>648</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>Mission</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>720</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>ResultatMission</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>672</y>
-      <w>24</w>
-      <h>64</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>304</x>
-      <y>744</y>
-      <w>128</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-Une équipe a 3 points</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLUseCase</id>
-    <coordinates>
-      <x>264</x>
-      <y>800</y>
-      <w>96</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>GameOver</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>144</x>
-      <y>408</y>
-      <w>136</w>
-      <h>344</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>150.0;410.0;10.0;410.0;10.0;10.0;150.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>48</x>
-      <y>80</y>
-      <w>280</w>
-      <h>768</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>330.0;940.0;10.0;940.0;10.0;10.0;270.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>192</x>
-      <y>424</y>
-      <w>128</w>
-      <h>256</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
+(on fait le "tout le monde ferme les yeux...")</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>720</y><w>120</w><h>40</h></coordinates><panel_attributes>TeamSelection</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>750</y><w>90</w><h>110</h></coordinates><panel_attributes>lt=-&gt;&gt;
+team choisit</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>840</y><w>120</w><h>40</h></coordinates><panel_attributes>Vote</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>730</y><w>530</w><h>250</h></coordinates><panel_attributes>lt=-&gt;&gt;
+Vote non majoritaire</panel_attributes><additional_attributes>10;230;400;230;400;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>870</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>940</y><w>120</w><h>40</h></coordinates><panel_attributes>RésultatVote</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>970</y><w>110</w><h>230</h></coordinates><panel_attributes>lt=-&gt;&gt;
+Vote majoritaire</panel_attributes><additional_attributes>10;10;10;210</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>1180</y><w>120</w><h>40</h></coordinates><panel_attributes>Mission</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>1410</y><w>120</w><h>40</h></coordinates><panel_attributes>ResultatMission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>1440</y><w>160</w><h>100</h></coordinates><panel_attributes>lt=-&gt;&gt;
+    Une équipe a 3 points</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>1520</y><w>120</w><h>40</h></coordinates><panel_attributes>GameOver</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>100</x><y>360</y><w>220</w><h>1090</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>200;1070;10;1070;10;10;190;10</additional_attributes></element><element><id>Relation</id><coordinates><x>30</x><y>80</y><w>290</w><h>1480</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>270;1460;10;1460;10;10;270;10</additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>750</y><w>250</w><h>470</h></coordinates><panel_attributes>lt=-&gt;&gt;
 
 
-
-
-
-
-
-
-5ème choix</panel_attributes>
-    <additional_attributes>140.0;10.0;140.0;40.0;10.0;40.0;10.0;300.0;90.0;300.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLGeneric</id>
-    <coordinates>
-      <x>96</x>
-      <y>384</y>
-      <w>464</w>
-      <h>384</h>
-    </coordinates>
-    <panel_attributes>Game
+5ème choix</panel_attributes><additional_attributes>230;10;230;40;10;40;10;450;180;450</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>90</x><y>340</y><w>900</w><h>1130</h></coordinates><panel_attributes>Game
 halign=left
-bg=orange</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>928</x>
-      <y>304</y>
-      <w>80</w>
-      <h>152</h>
-    </coordinates>
-    <panel_attributes>ClientAction
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1130</x><y>480</y><w>100</w><h>190</h></coordinates><panel_attributes>ClientAction
 --
 playerId
 message
 gameId
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-</diagram>
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>748</y><w>250</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (leaderOpinion)</panel_attributes><additional_attributes>225;30;10;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>500</x><y>780</y><w>180</w><h>40</h></coordinates><panel_attributes>Vote Face découverte</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>808</y><w>200</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>15;40;180;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>290</x><y>350</y><w>140</w><h>40</h></coordinates><panel_attributes>NewMission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>1318</y><w>220</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (Conversation surprise)</panel_attributes><additional_attributes>195;20;10;20</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>600</x><y>1310</y><w>120</w><h>50</h></coordinates><panel_attributes>Conversation
+Surprise</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>300</x><y>1320</y><w>120</w><h>40</h></coordinates><panel_attributes>VoteMission</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>1211</y><w>30</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>1351</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>1178</y><w>210</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (PleineLumiere)</panel_attributes><additional_attributes>185;20;10;20</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>590</x><y>1170</y><w>120</w><h>50</h></coordinates><panel_attributes>Pleine Lumière</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>380</x><y>1211</y><w>270</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;110;250;10</additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>1351</y><w>270</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;80;250;10</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>380</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>290</x><y>570</y><w>140</w><h>40</h></coordinates><panel_attributes>DonnePouvoir</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>530</x><y>1010</y><w>120</w><h>40</h></coordinates><panel_attributes>VoteDefiance</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>380</x><y>968</y><w>180</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (VoteDefiance)</panel_attributes><additional_attributes>155;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>1041</y><w>230</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-
+
+r2=If (let it happen)
+r2pos=-5,7
+</panel_attributes><additional_attributes>10;140;210;10</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>681</y><w>570</w><h>370</h></coordinates><panel_attributes>lt=&lt;&lt;-
+
+r2=If (annule)</panel_attributes><additional_attributes>10;40;10;20;550;20;550;350;260;350</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>610</x><y>480</y><w>140</w><h>40</h></coordinates><panel_attributes>QuestionConfiance</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>348</y><w>190</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (leaderCharismatique)</panel_attributes><additional_attributes>165;20;10;20</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>290</x><y>470</y><w>140</w><h>40</h></coordinates><panel_attributes>PigePouvoir</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>500</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>600</y><w>30</w><h>140</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>380</y><w>210</w><h>120</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>190;10;10;100</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>590</x><y>360</y><w>140</w><h>40</h></coordinates><panel_attributes>LeaderCharismatique</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>620</x><y>570</y><w>140</w><h>40</h></coordinates><panel_attributes>OreilleIndiscrète</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>478</y><w>220</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (QuestionConfiance)</panel_attributes><additional_attributes>195;20;10;20</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>620</x><y>630</y><w>140</w><h>40</h></coordinates><panel_attributes>Confidence</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>568</y><w>220</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (OreilleIndiscrète)</panel_attributes><additional_attributes>195;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>410</x><y>588</y><w>230</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;.
+if (OreilleIndiscrète)</panel_attributes><additional_attributes>205;60;10;10</additional_attributes></element></diagram>

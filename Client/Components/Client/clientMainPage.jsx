@@ -51,7 +51,7 @@ class ClientMainPage extends React.Component {
     let ClientAction = {
       playerId:window.gameOptions.playerId,
       gameId:window.gameOptions.gameId,
-      message:"START_GAME"
+      action:"START_GAME"
     }
     window.socket.emit('gameUpdate', ClientAction);
   }
@@ -60,7 +60,7 @@ class ClientMainPage extends React.Component {
     let ClientAction = {
       playerId:window.gameOptions.playerId,
       gameId:window.gameOptions.gameId,
-      message:"NEXT_STEP"
+      action:"NEXT_STEP"
     }
     window.socket.emit('gameUpdate', ClientAction);
   }

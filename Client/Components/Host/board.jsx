@@ -8,7 +8,7 @@ class Board extends React.Component {
     let game = this.props.game;
 
     return (
-      <div className="board">
+      <div className="board metal-background">
         <div className="missions clearfix">
           {game.missions.map(function(mission, i){
             var color = "white"

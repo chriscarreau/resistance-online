@@ -8,7 +8,7 @@ class PageTeamSelection extends React.Component {
     let ClientAction = {
         playerId: window.gameOptions.playerId,
         gameId: window.gameOptions.gameId,
-        message:"SUBMIT_TEAM"
+        action:"SUBMIT_TEAM"
     }
     window.socket.emit('gameUpdate', ClientAction);
   }

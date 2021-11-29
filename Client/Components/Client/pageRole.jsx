@@ -21,7 +21,7 @@ class PageRole extends React.Component {
      let ClientAction = {
       playerId:window.gameOptions.playerId,
       gameId:window.gameOptions.gameId,
-      message:"ACCEPT_ROLE"
+      action:"ACCEPT_ROLE"
     }
     window.socket.emit('gameUpdate', ClientAction);
   }

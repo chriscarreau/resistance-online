@@ -6,7 +6,7 @@ class PlayerBar extends React.Component {
         let ClientAction = {
             playerId:this.props.player.playerId,
             gameId:window.gameOptions.gameId,
-            message:"ADD_REMOVE_PLAYER_TEAM"
+            action:"ADD_REMOVE_PLAYER_TEAM"
         }
         window.socket.emit('gameUpdate', ClientAction);
     }

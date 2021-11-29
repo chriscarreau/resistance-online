@@ -49,3 +49,6 @@ jspm_packages
 #fichier temp
 bundle.js
 index.html
+
+dist
+.vscode
