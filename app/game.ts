@@ -2,16 +2,22 @@
 import { Player } from "./player";
 import { Mission } from "./mission";
 import { Server } from "socket.io";
-import { ActionEnum, arrayTeamSize, ClientUpdateAction, GameStateEnum, MissionResultEnum, RoleEnum } from "./tools";
+import { IPower, PowerTypeEnum } from "../shared/power.interface";
+import { ActionEnum, GameStateEnum, MissionResultEnum, RoleEnum } from "../shared/enums";
+import { getSmallPowerPool, getLargePowerPool, arrayTeamSize } from "../shared/constants";
+import { ClientUpdateAction } from "../shared/client-update-action.interface";
+import { IPlayer } from "../shared/player.interface";
+import { IMission } from "../shared/mission.interface";
+import { IGame } from "../shared/game.interface";
 const util = require('util');
 
-export class Game {
+export class Game implements IGame {
     gameId: string;
-    firstPlayer?: Player = undefined;
-    players: Player[] = [];
-    spy: Player[] = [];
-    resistance: Player[] = [];
-    missions: Mission[] = [];
+    firstPlayer?: IPlayer = undefined;
+    players: IPlayer[] = [];
+    spy: IPlayer[] = [];
+    resistance: IPlayer[] = [];
+    missions: IMission[] = [];
     currentMission: number = 0;
     firstLeader: number = 0;
     lastLeader: number = 0;
@@ -19,6 +25,11 @@ export class Game {
     playerRoleAccepte: Player[] = [];
     teamSizes: number[] = [];
     hostId: string;
+    powerPool: IPower[] = [];
+    drawnPower?: IPower;
+    temporaryLeader?: number;
+    powerSelectionPlayers: IPlayer[] = [];
+    playerSelectedForPower?: IPlayer;
     gameState: GameStateEnum = GameStateEnum.NOT_STARTED;
 
     constructor(gameId: string, hostId: string) {
@@ -46,7 +57,136 @@ export class Game {
                 }
                 // On attends que tout le monde ait accepté son rôle
                 if (this.hasEveryoneAcceptedRole()) {
+                    this.drawnPower = this.drawRandomPower();
                     this.players[this.getCurrentLeader()].isLeader = true;
+                    this.gameState = GameStateEnum.DRAW_POWER;
+                }
+                break;
+            case GameStateEnum.STRONG_LEADER:
+                if (clientAction.action === ActionEnum.USE_POWER) {
+                    // Change leader to the player who stole the mission
+                    this.temporaryLeader = this.players.findIndex(player => player.playerId === clientAction.playerId);
+                    this.removePowerFromPlayer(PowerTypeEnum.StrongLeader, player);
+                    this.players[this.getCurrentLeader()].isLeader = true;
+                    this.gameState = GameStateEnum.DRAW_POWER;
+                }
+                else if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.players[this.getCurrentLeader()].isLeader = true;
+                    this.gameState = GameStateEnum.DRAW_POWER;
+                }
+                break;
+                
+            case GameStateEnum.DRAW_POWER:
+                // We are only waiting for the leader to continue, after seeing the power drawn
+                if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    if (this.drawnPower?.type === PowerTypeEnum.EstablishConfidence) {
+                        this.gameState = GameStateEnum.ESTABLISH_CONFIDENCE_SELECT;
+                    }
+                    else {
+                        this.gameState = GameStateEnum.GIVE_POWER;
+                    }
+                }
+                break;
+            case GameStateEnum.GIVE_POWER:
+                // Leader selects who he's going to give the power to
+                if (clientAction.action === ActionEnum.ADD_REMOVE_PLAYER_TEAM) {
+                    const index = this.powerSelectionPlayers.findIndex(player => player.playerId === clientAction.playerId);
+                    if (index !== -1) {
+                        this.powerSelectionPlayers.splice(index, 1);
+                    }
+                    else {
+                        this.powerSelectionPlayers.push(player);
+                    }
+                }
+                else if (clientAction.action === ActionEnum.SUBMIT_TEAM) {
+                    if (this.powerSelectionPlayers.length === 1) {
+                        this.givePowerToPlayer(this.powerSelectionPlayers[0]);
+                        
+                        if (this.drawnPower?.type === PowerTypeEnum.OverheardConversation) {
+                            this.gameState = GameStateEnum.OVERHEARD_CONVERSATION_SELECT;
+                        }
+                        else if (this.drawnPower?.type === PowerTypeEnum.OpenUp) {
+                            this.gameState = GameStateEnum.OPEN_UP_SELECT;
+                        }
+                        else {
+                            this.gameState = GameStateEnum.TEAM_SELECTION;
+                        }
+                        this.drawnPower = undefined;
+                    }
+                }
+                break;
+            case GameStateEnum.ESTABLISH_CONFIDENCE_SELECT:
+                // Leader selects who he's going to show his role to
+                if (clientAction.action === ActionEnum.ADD_REMOVE_PLAYER_TEAM) {
+                    const index = this.powerSelectionPlayers.findIndex(player => player.playerId === clientAction.playerId);
+                    if (index !== -1) {
+                        this.powerSelectionPlayers.splice(index, 1);
+                    }
+                    else {
+                        this.powerSelectionPlayers.push(player);
+                    }
+                }
+                else if (clientAction.action === ActionEnum.SUBMIT_TEAM) {
+                    if (this.powerSelectionPlayers.length === 1) {
+                        this.playerSelectedForPower = this.powerSelectionPlayers[0];
+                        this.gameState = GameStateEnum.ESTABLISH_CONFIDENCE_REVEAL;
+                    }
+                }
+                break;
+            case GameStateEnum.ESTABLISH_CONFIDENCE_REVEAL:
+                // We are only waiting for the person to acknowledge he saw the role of the other player
+                if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.removePowerFromAllPlayer(PowerTypeEnum.EstablishConfidence);
+                    this.gameState = GameStateEnum.TEAM_SELECTION;
+                }
+                break;
+            case GameStateEnum.OVERHEARD_CONVERSATION_SELECT:
+                // Leader selects who he's going to show his role to
+                if (clientAction.action === ActionEnum.ADD_REMOVE_PLAYER_TEAM) {
+                    const index = this.powerSelectionPlayers.findIndex(player => player.playerId === clientAction.playerId);
+                    if (index !== -1) {
+                        this.powerSelectionPlayers.splice(index, 1);
+                    }
+                    else {
+                        this.powerSelectionPlayers.push(player);
+                    }
+                }
+                else if (clientAction.action === ActionEnum.SUBMIT_TEAM) {
+                    if (this.powerSelectionPlayers.length === 1) {
+                        this.playerSelectedForPower = this.powerSelectionPlayers[0];
+                        this.gameState = GameStateEnum.OVERHEARD_CONVERSATION_REVEAL;
+                    }
+                }
+                break;
+            case GameStateEnum.OVERHEARD_CONVERSATION_REVEAL:
+                // We are only waiting for the person to acknowledge he saw the role of the other player
+                if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.removePowerFromAllPlayer(PowerTypeEnum.OverheardConversation);
+                    this.gameState = GameStateEnum.TEAM_SELECTION;
+                }
+                break;
+            case GameStateEnum.OPEN_UP_SELECT:
+                // Leader selects who he's going to show his role to
+                if (clientAction.action === ActionEnum.ADD_REMOVE_PLAYER_TEAM) {
+                    const index = this.powerSelectionPlayers.findIndex(player => player.playerId === clientAction.playerId);
+                    if (index !== -1) {
+                        this.powerSelectionPlayers.splice(index, 1);
+                    }
+                    else {
+                        this.powerSelectionPlayers.push(player);
+                    }
+                }
+                else if (clientAction.action === ActionEnum.SUBMIT_TEAM) {
+                    if (this.powerSelectionPlayers.length === 1) {
+                        this.playerSelectedForPower = this.powerSelectionPlayers[0];
+                        this.gameState = GameStateEnum.OPEN_UP_REVEAL;
+                    }
+                }
+                break;
+            case GameStateEnum.OPEN_UP_REVEAL:
+                // We are only waiting for the person to acknowledge he saw the role of the other player
+                if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.removePowerFromAllPlayer(PowerTypeEnum.OpenUp);
                     this.gameState = GameStateEnum.TEAM_SELECTION;
                 }
                 break;
@@ -66,9 +206,30 @@ export class Game {
                             this.gameState = GameStateEnum.MISSION;
                         }
                         else {
-                            this.gameState = GameStateEnum.VOTE;
+                            if (this.anyPlayerHasPower(PowerTypeEnum.OpinionMaker)) {
+                                this.gameState = GameStateEnum.OPINION_MAKER_VOTE;
+                            }
+                            else {
+                                this.gameState = GameStateEnum.VOTE;
+                            }
                         }
                     }
+                }
+                break;
+            case GameStateEnum.OPINION_MAKER_VOTE:
+                if (clientAction.action === ActionEnum.CANCEL_MISSION) {
+                    currentMission.playerAccept = [];
+                    currentMission.playerReject = [];
+                    this.gameState = GameStateEnum.TEAM_SELECTION;
+                    break;
+                }
+                else if (clientAction.action === ActionEnum.VOTE_ACCEPT) {
+                    currentMission.acceptTeam(player);
+                    this.gameState = GameStateEnum.VOTE;
+                }
+                else if (clientAction.action === ActionEnum.VOTE_REJECT) {
+                    currentMission.rejectTeam(player);
+                    this.gameState = GameStateEnum.VOTE;
                 }
                 break;
             case GameStateEnum.VOTE:
@@ -93,31 +254,66 @@ export class Game {
                 }
                 break;
             case GameStateEnum.VOTE_RESULT:
-                //Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine étape"
+                // Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine étape"
                 if (clientAction.action === ActionEnum.NEXT_STEP) {
                     // Accepté
                     if (currentMission.isMissionAccepted()) {
-                        this.gameState = GameStateEnum.MISSION;
+                        if (this.anyPlayerHasPower(PowerTypeEnum.NoConfidence)) {
+                            this.gameState = GameStateEnum.NO_CONFIDENCE_CHOICE;
+                        }
+                        else {
+                            this.gameState = GameStateEnum.MISSION;
+                        }
                     }
                     // Refusé
                     else {
                         this.players[this.getCurrentLeader()].isLeader = false;
                         currentMission.voteRejected();
+                        // If there was a temporary leader, revert to the normal order
+                        this.temporaryLeader = undefined;
                         console.log("currentLeader = " + this.getCurrentLeader());
                         this.players[this.getCurrentLeader()].isLeader = true;
                         this.gameState = GameStateEnum.TEAM_SELECTION;
                     }
                 }
                 break;
-            case GameStateEnum.MISSION:
+
+            case GameStateEnum.NO_CONFIDENCE_CHOICE:
                 if (clientAction.action === ActionEnum.CANCEL_MISSION) {
+                    this.removePowerFromPlayer(PowerTypeEnum.NoConfidence, player);
                     this.players[this.getCurrentLeader()].isLeader = false;
                     currentMission.voteRejected();
+                    // If there was a temporary leader, revert to the normal order
+                    this.temporaryLeader = undefined;
                     this.players[this.getCurrentLeader()].isLeader = true;
                     this.gameState = GameStateEnum.TEAM_SELECTION;
                     break;
                 }
-                else if (clientAction.action === ActionEnum.CANCEL_VOTE) {
+                else if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.gameState = GameStateEnum.MISSION;
+                }
+                break;
+            case GameStateEnum.SPOTLIGHT_CHOICE:
+                if (clientAction.action === ActionEnum.USE_POWER) {
+                    this.gameState = GameStateEnum.SPOTLIGHT_VOTE;
+                    this.removePowerFromPlayer(PowerTypeEnum.Spotlight, player);
+                }
+                else if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.gameState = GameStateEnum.MISSION;
+                }
+                break;
+            case GameStateEnum.SPOTLIGHT_VOTE:
+                if (clientAction.action === ActionEnum.VOTE_SUCCESS) {
+                    currentMission.voteSuccess(player);
+                    this.gameState = GameStateEnum.MISSION;
+                }
+                else if (clientAction.action === ActionEnum.VOTE_FAIL) {
+                    currentMission.voteFail(player);
+                    this.gameState = GameStateEnum.MISSION;
+                }
+                break;
+            case GameStateEnum.MISSION:
+                if (clientAction.action === ActionEnum.CANCEL_VOTE) {
                     currentMission.cancelMissionVote(player);
                 }
                 else if (clientAction.action === ActionEnum.VOTE_SUCCESS) {
@@ -131,6 +327,19 @@ export class Game {
                     this.gameState = GameStateEnum.MISSION_RESULT;
                 }
                 break;
+            case GameStateEnum.KEEPING_CLOSE_EYE_CHOICE:
+                if (clientAction.action === ActionEnum.USE_POWER) {
+                    this.gameState = GameStateEnum.KEEPING_CLOSE_EYE_REVEAL;
+                }
+                else if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.gameState = GameStateEnum.MISSION_RESULT;
+                }
+                break;
+            case GameStateEnum.KEEPING_CLOSE_EYE_REVEAL:
+                if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.gameState = GameStateEnum.MISSION_RESULT;
+                }
+                break;
             case GameStateEnum.MISSION_RESULT:
                 //Ici y'a rien à faire côté serveur, on attend que le leader appuie sur "passer à la prochaine étape"
                 if (clientAction.action === ActionEnum.NEXT_STEP) {
@@ -141,7 +350,13 @@ export class Game {
                         this.players[this.getCurrentLeader()].isLeader = false;
                         this.startNewMission();
                         this.players[this.getCurrentLeader()].isLeader = true;
-                        this.gameState = GameStateEnum.TEAM_SELECTION;
+                        if (this.anyPlayerHasPower(PowerTypeEnum.StrongLeader)) {
+                            this.gameState = GameStateEnum.STRONG_LEADER;
+                        }
+                        else {
+                            this.players[this.getCurrentLeader()].isLeader = true;
+                            this.gameState = GameStateEnum.DRAW_POWER;
+                        }
                     }
                 }
                 break;
@@ -154,7 +369,8 @@ export class Game {
         }
         io.to(this.gameId).emit('gameUpdate', this);
     }
-    resetGame() {
+
+    resetGame(): void {
         this.spy = [];
         this.resistance = [];
         this.missions = [];
@@ -166,7 +382,7 @@ export class Game {
         //TODO: Reset players (genre isLeader, hasAcceptedRole)
     }
 
-    getPlayer(playerId: string) {
+    getPlayer(playerId: string): IPlayer | undefined {
         for (var i = 0; i < this.players.length; i++) {
             if (this.players[i].playerId === playerId) {
                 return this.players[i];
@@ -175,11 +391,11 @@ export class Game {
         return undefined;
     }
 
-    addPlayer(player: Player) {
+    addPlayer(player: IPlayer): void {
          this.addPlayerToArray(this.players, player);
     }
 
-    removePlayer(playerId: string) {
+    removePlayer(playerId: string): void {
         for (var i = 0; i < this.players.length; i++) {
             if (this.players[i].playerId === playerId) {
                 this.players.splice(i, 1);//delete element at i in array
@@ -188,8 +404,9 @@ export class Game {
         }
     }
 
-    startGame(io: Server) {
+    startGame(io: Server): void {
         this.nbPlayersTotal = this.players.length;
+        this.powerPool = this.nbPlayersTotal < 7 ? getSmallPowerPool() : getLargePowerPool();
         this.firstLeader = Math.floor(Math.random() * this.nbPlayersTotal);
         this.lastLeader = (this.firstLeader + 4) % this.nbPlayersTotal;
         //On remplis un tableau dans l'objet Game contenant la grosseur des équipes pour chaque mission, maintenant que tous les joueurs sont présents
@@ -222,7 +439,7 @@ export class Game {
         io.to(this.gameId).emit('gameUpdate', this);
     }
 
-    assignRoles() {
+    assignRoles(): void {
         var nbSpy = 0;
         switch (this.nbPlayersTotal) {
             case 5:
@@ -251,25 +468,54 @@ export class Game {
         }
     }
 
-    acceptRole(player: Player) {
+    acceptRole(player: IPlayer): void {
          this.addPlayerToArray(this.playerRoleAccepte, player);
         player.hasAcceptedRole = true;
     }
 
-    hasEveryoneAcceptedRole() {
+    hasEveryoneAcceptedRole(): boolean {
         return this.playerRoleAccepte.length == this.nbPlayersTotal;
     }
 
-    startNewMission() {
+    startNewMission(): void {
         this.firstLeader = (this.getCurrentLeader() + 1) % this.nbPlayersTotal;
         this.lastLeader = (this.firstLeader + 4) % this.nbPlayersTotal;
         this.currentMission++;
     }
-    getCurrentLeader() {
+    getCurrentLeader(): number {
+        if (this.temporaryLeader !== undefined) {
+            return this.temporaryLeader;
+        }
         return (this.firstLeader + this.missions[this.currentMission].currentRound) % this.nbPlayersTotal;
     }
+    
+    drawRandomPower(): IPower {
+        const index = Math.floor(Math.random() * this.powerPool.length)
+        // Removes an element from the array (in-place), while returning it
+        return this.powerPool.splice(index, 1)[0];
+    }
 
-    hasATeamWon() {
+    givePowerToPlayer(player: IPlayer): void {
+        if (!this.drawnPower) {
+            return;
+        }
+        player.powers.push(this.drawnPower);
+    }
+
+    removePowerFromAllPlayer(powerType: PowerTypeEnum): void {
+        for (const player of this.players) {
+            this.removePowerFromPlayer(powerType, player);
+        }
+    };
+
+    removePowerFromPlayer(powerType: PowerTypeEnum, player: IPlayer): void {
+        const index = player.powers.findIndex(power => power.type === powerType)
+        if (index !== -1) {
+            player.powers.splice(index, 1);
+        }
+    }
+
+    hasATeamWon(): boolean {
         let scoreResistance = 0, scoreSpy = 0;
         for (let i = 0; i < this.missions.length; i++) {
             if (this.missions[i].result === MissionResultEnum.RESISTANCE) {
@@ -282,7 +528,7 @@ export class Game {
         return (scoreSpy >= 3 || scoreResistance >= 3);
     }
 
-    private shuffle(array: Player[]) {
+    private shuffle(array: IPlayer[]) {
         var currentIndex = array.length, temporaryValue, randomIndex, tempArray;
         tempArray = Array.from(array);
     
@@ -301,12 +547,16 @@ export class Game {
     
         return tempArray;
     }
-    private addPlayerToArray(array: Player[], player: Player) {
+    private addPlayerToArray(array: IPlayer[], player: IPlayer) {
         for (var i = 0; i < array.length; i++) {
             if (array[i].playerId === player.playerId) {
                 return;
             }
         }
         array.push(player);
+    }
+
+    private anyPlayerHasPower(powerType: PowerTypeEnum): boolean {
+        return this.players.some(player => player.powers.some(power => power.type === powerType));
     }
 };

@@ -1,6 +1,8 @@
-import { RoleEnum } from "./tools";
+import { IPower } from "../shared/power.interface";
+import { IPlayer } from "../shared/player.interface";
+import { RoleEnum } from "../shared/enums";
 
-export class Player {
+export class Player implements IPlayer {
     playerId: string;
     playerName: string;
     role?: RoleEnum;
@@ -8,6 +10,8 @@ export class Player {
     nbMissionBleu: number = 0;
     nbMissionRouge: number = 0;
     hasAcceptedRole: boolean = false;
+    powers: IPower[] = [];
+
     constructor(playerId: string, playerName: string) {
         this.playerId = playerId;
         this.playerName = playerName;

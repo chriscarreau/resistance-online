@@ -5,7 +5,9 @@ import {Server} from "socket.io";
 import util from "util";
 import { Game } from "./game";
 import { Player } from "./player";
-import { ClientUpdateAction, GameStateEnum } from "./tools";
+import { IGame } from "../shared/game.interface";
+import { GameStateEnum } from "../shared/enums";
+import { ClientUpdateAction } from "../shared/client-update-action.interface";
 
 var gameport    = process.env.PORT || 8080;
 var app         = express();
@@ -13,7 +15,7 @@ var httpServer  = http.createServer(app);
 var io          = new Server(httpServer);
 
 //game variables
-const games: Game[] = [];
+const games: IGame[] = [];
 
 app.use('/', express.static(path.resolve('./Client/static/')));
 

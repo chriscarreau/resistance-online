@@ -1,0 +1,56 @@
+
+
+export enum RoleEnum {
+    SPY = 0,
+    RESISTANCE = 1
+}
+
+export enum GameStateEnum {
+    NOT_STARTED = 0,
+    DISTRIBUTE_ROLE = 1,
+    STRONG_LEADER = 2,
+    DRAW_POWER = 3,
+    ESTABLISH_CONFIDENCE_SELECT = 4,
+    ESTABLISH_CONFIDENCE_REVEAL = 5,
+    GIVE_POWER = 6,
+    OVERHEARD_CONVERSATION_SELECT = 7,
+    OVERHEARD_CONVERSATION_REVEAL = 8,
+    OPEN_UP_SELECT = 9,
+    OPEN_UP_REVEAL = 10,
+    TEAM_SELECTION = 11,
+    OPINION_MAKER_VOTE = 12,
+    VOTE = 13,
+    VOTE_RESULT = 14,
+    NO_CONFIDENCE_CHOICE = 15,
+    MISSION = 16,
+    SPOTLIGHT_CHOICE = 17,
+    SPOTLIGHT_VOTE = 18,
+    MISSION_VOTE = 19,
+    KEEPING_CLOSE_EYE_CHOICE = 20,
+    KEEPING_CLOSE_EYE_REVEAL = 21,
+    MISSION_RESULT = 22,
+    GAME_OVER = 23
+}
+
+export enum  MissionResultEnum {
+    NO_RESULT = 0,
+    SPY = 1,
+    RESISTANCE = 2
+}
+
+export enum ActionEnum {
+    START_GAME = 1,
+    ACCEPT_ROLE = 2,
+    ADD_REMOVE_PLAYER_TEAM = 3,
+    SUBMIT_TEAM = 4,
+    CANCEL_MISSION = 5,
+    CANCEL_VOTE = 6,
+    VOTE_ACCEPT = 7,
+    VOTE_REJECT = 8,
+    REVEAL_VOTE = 9,
+    NEXT_STEP = 10,
+    VOTE_SUCCESS = 11,
+    VOTE_FAIL = 12,
+    REVEAL_MISSION = 13,
+    USE_POWER = 14
+}
