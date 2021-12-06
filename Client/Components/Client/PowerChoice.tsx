@@ -1,7 +1,7 @@
 import { object } from "prop-types";
 import React from "react";
 import { IPowerChoiceProps } from "./props";
-import { GetCurrentJoueur } from '../../Utils';
+import { GetCurrentPlayer } from '../../Utils';
 import { ActionEnum } from "../../../shared/enums";
 import { PowerTypeEnum } from "../../../shared/power.interface";
 import { ClientUpdateAction } from "../../../shared/client-update-action.interface";
@@ -19,7 +19,7 @@ export class PowerChoice extends React.Component<IPowerChoiceProps> {
 
     render() {
         let content = undefined;
-        const currentPlayer = GetCurrentJoueur(this.props.game);
+        const currentPlayer = GetCurrentPlayer(this.props.game);
         let powerText, powerImage;
         switch (this.props.powerType) {
             case PowerTypeEnum.StrongLeader:

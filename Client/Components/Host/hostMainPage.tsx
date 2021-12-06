@@ -72,14 +72,8 @@ class HostMainPage extends React.Component<IGameProps> {
 
     if (game) {
       switch (this.props.game.gameState) {
-        case GameStateEnum.NOT_STARTED:
-        case GameStateEnum.DISTRIBUTE_ROLE:
-        case GameStateEnum.TEAM_SELECTION:
-        case GameStateEnum.VOTE:
-        case GameStateEnum.MISSION:
-          stateContent = <ListPlayers game={game} players={game.players} />;
-          break;
         case GameStateEnum.VOTE_RESULT:
+        case GameStateEnum.NO_CONFIDENCE_CHOICE:
           stateContent = <VoteResult game={game} />;
           break;
         case GameStateEnum.MISSION_RESULT:
@@ -87,6 +81,10 @@ class HostMainPage extends React.Component<IGameProps> {
           break;
         case GameStateEnum.DRAW_POWER:
           stateContent = <DrawPower game={game} />;
+          break;
+        default:
+          // All the other states just shows the list of players
+          stateContent = <ListPlayers game={game} players={game.players} />;
           break;
       }
       content = (<div>

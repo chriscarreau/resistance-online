@@ -6,6 +6,17 @@ export interface IGameProps {
     game: IGame;
 }
 
+export interface IPageVoteProps {
+    game: IGame;
+    isOpinionMaker: boolean;
+}
+
+export interface IPageMissionProps {
+    game: IGame;
+    isSpotlight: boolean;
+}
+
+
 export interface IPlayerProps {
     player: IPlayer;
 }
@@ -20,8 +31,21 @@ export interface IPageRoleProps {
     spies: IPlayer[];
 }
 
+export interface IPageRevealProps {
+    game: IGame;
+    playerSeeing: IPlayer;
+    playerRevealing: IPlayer;
+}
+
+
 export interface ITeamSelectionProps {
     player: IPlayer;
+    game: IGame;
+}
+
+export interface IPowerSelectionProps {
+    selectingPlayer: IPlayer;
+    players: IPlayer[];
     game: IGame;
 }
 
@@ -42,6 +66,7 @@ export interface IPastilleProps {
 }
 
 export interface IPlayerCardProps {
+  game: IGame;
   player: IPlayer;
   selected: boolean;
   hasVoted: boolean;

@@ -8,13 +8,16 @@ import { PageVote } from './pageVote';
 import { PageMission } from './pageMission';
 import { ContinuePage } from './continuePage';
 import { StatusBar } from './statusBar';
-import { GetCurrentJoueur, IsPremierJoueur } from '../../Utils';
+import { GetCurrentLeader, GetCurrentPlayer, GetPlayerWithPower, GetSidePlayersOfPlayer, IsPremierJoueur, ShuffleArray } from '../../Utils';
 import { ClientUpdateAction } from "../../../shared/client-update-action.interface";
 import { IGameProps } from './props';
 import { ActionEnum, GameStateEnum } from '../../../shared/enums';
 import { object } from 'prop-types';
 import { PowerChoice } from './PowerChoice';
 import { PowerTypeEnum } from '../../../shared/power.interface';
+import { PagePowerSelection } from './pagePowerSelection';
+import { PageRoleReveal } from './pageRoleReveal';
+import { PageMissionVoteReveal } from './pageMissionVoteReveal';
 
 class ClientMainPage extends React.Component<IGameProps> {
 
@@ -75,7 +78,8 @@ class ClientMainPage extends React.Component<IGameProps> {
   render() {
     let content = undefined, statusBar = undefined;
     if(this.props.game) {
-      statusBar = <StatusBar player={GetCurrentJoueur(this.props.game)}></StatusBar>;
+      const currentLeader = GetCurrentLeader(this.props.game);
+      statusBar = <StatusBar player={GetCurrentPlayer(this.props.game)}></StatusBar>;
       switch(this.props.game.gameState){
         case GameStateEnum.NOT_STARTED:
           content = "Votre rôle sera assigné dès que la partie aura commencé";
@@ -99,14 +103,43 @@ class ClientMainPage extends React.Component<IGameProps> {
         case GameStateEnum.DRAW_POWER:
           content = <ContinuePage game={this.props.game} ></ContinuePage>
         break;
+        case GameStateEnum.GIVE_POWER:
+          content = <PagePowerSelection selectingPlayer={GetCurrentLeader(this.props.game)} players={this.props.game.players.filter(p => p.playerId !== currentLeader.playerId)} game={this.props.game} ></PagePowerSelection>
+        break;
+        case GameStateEnum.ESTABLISH_CONFIDENCE_SELECT:
+          content = <PagePowerSelection selectingPlayer={GetCurrentLeader(this.props.game)} players={this.props.game.players.filter(p => p.playerId !== currentLeader.playerId)} game={this.props.game} ></PagePowerSelection>
+        break;
+        case GameStateEnum.ESTABLISH_CONFIDENCE_REVEAL:
+          content = <PageRoleReveal playerSeeing={this.props.game.playerSelectedForPower} playerRevealing={GetCurrentLeader(this.props.game)} game={this.props.game} ></PageRoleReveal>
+        break;
+        case GameStateEnum.OVERHEARD_CONVERSATION_SELECT:
+          const selectingPlayer = GetPlayerWithPower(this.props.game, PowerTypeEnum.OverheardConversation);
+          const sidePlayers = GetSidePlayersOfPlayer(this.props.game, selectingPlayer);
+          content = <PagePowerSelection selectingPlayer={selectingPlayer} players={sidePlayers} game={this.props.game} ></PagePowerSelection>
+        break;
+        case GameStateEnum.OVERHEARD_CONVERSATION_REVEAL:
+          const playerRevealingRole = GetPlayerWithPower(this.props.game, PowerTypeEnum.OverheardConversation);
+          content = <PageRoleReveal playerSeeing={this.props.game.playerSelectedForPower} playerRevealing={playerRevealingRole}  game={this.props.game} ></PageRoleReveal>
+        break;
+        case GameStateEnum.OPEN_UP_SELECT:
+          const openUpPlayer = GetPlayerWithPower(this.props.game, PowerTypeEnum.OpenUp);
+          content = <PagePowerSelection selectingPlayer={openUpPlayer} players={this.props.game.players.filter(p => p.playerId !== openUpPlayer.playerId)} game={this.props.game} ></PagePowerSelection>
+        break;
+        case GameStateEnum.OPEN_UP_REVEAL:
+          const openUpRevealingPlayer = GetPlayerWithPower(this.props.game, PowerTypeEnum.OpenUp);
+          content = <PageRoleReveal playerSeeing={this.props.game.playerSelectedForPower} playerRevealing={openUpRevealingPlayer}  game={this.props.game} ></PageRoleReveal>
+        break;
         case GameStateEnum.DISTRIBUTE_ROLE:
-          content = <PageRole player={GetCurrentJoueur(this.props.game)} spies={this.props.game.spy}></PageRole>
+          content = <PageRole player={GetCurrentPlayer(this.props.game)} spies={this.props.game.spy}></PageRole>
         break;
         case GameStateEnum.TEAM_SELECTION:
-          content = <PageTeamSelection player={GetCurrentJoueur(this.props.game)} game={this.props.game}></PageTeamSelection>
+          content = <PageTeamSelection player={GetCurrentPlayer(this.props.game)} game={this.props.game}></PageTeamSelection>
+        break;
+        case GameStateEnum.OPINION_MAKER_VOTE:
+          content = <PageVote isOpinionMaker={true} game={this.props.game} ></PageVote>
         break;
         case GameStateEnum.VOTE:
-          content = <PageVote game={this.props.game} ></PageVote>
+          content = <PageVote isOpinionMaker={false} game={this.props.game} ></PageVote>
         break;
         case GameStateEnum.VOTE_RESULT:
           content = <ContinuePage game={this.props.game} ></ContinuePage>
@@ -114,8 +147,30 @@ class ClientMainPage extends React.Component<IGameProps> {
         case GameStateEnum.NO_CONFIDENCE_CHOICE:
           content = <PowerChoice powerType={PowerTypeEnum.NoConfidence} game={this.props.game}></PowerChoice>
         break;
+        case GameStateEnum.SPOTLIGHT_CHOICE:
+          content = <PowerChoice powerType={PowerTypeEnum.Spotlight} game={this.props.game}></PowerChoice>
+        break;
+        case GameStateEnum.SPOTLIGHT_SELECT:
+          let playersWhoWillVote = this.props.game.missions[this.props.game.currentMission].currentTeam.filter(p => p.playerId !== this.props.game.playerUsingPower.playerId);
+          content = <PagePowerSelection selectingPlayer={this.props.game.playerUsingPower} players={playersWhoWillVote} game={this.props.game} ></PagePowerSelection>
+        break;
+        case GameStateEnum.SPOTLIGHT_VOTE:
+          content = <PageMission isSpotlight={true} game={this.props.game} ></PageMission>
+        break;
         case GameStateEnum.MISSION:
-          content = <PageMission game={this.props.game} ></PageMission>
+          content = <PageMission isSpotlight={false} game={this.props.game} ></PageMission>
+        break;
+        case GameStateEnum.KEEPING_CLOSE_EYE_CHOICE:
+          content = <PowerChoice powerType={PowerTypeEnum.KeepingCloseEyeOnYou} game={this.props.game}></PowerChoice>
+        break;
+        case GameStateEnum.KEEPING_CLOSE_EYE_SELECT:
+          let playersWhoVoted = this.props.game.missions[this.props.game.currentMission].playerVoteFail.concat(this.props.game.missions[this.props.game.currentMission].playerVoteSuccess);
+          playersWhoVoted = playersWhoVoted.filter(p => p.playerId !== this.props.game.playerUsingPower.playerId)
+          ShuffleArray(playersWhoVoted);
+          content = <PagePowerSelection selectingPlayer={this.props.game.playerUsingPower} players={playersWhoVoted} game={this.props.game} ></PagePowerSelection>
+        break;
+        case GameStateEnum.KEEPING_CLOSE_EYE_REVEAL:
+          content = <PageMissionVoteReveal game={this.props.game} playerRevealing={this.props.game.playerSelectedForPower} playerSeeing={this.props.game.playerUsingPower} ></PageMissionVoteReveal>
         break;
         case GameStateEnum.MISSION_RESULT:
           content = <ContinuePage game={this.props.game} ></ContinuePage>

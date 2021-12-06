@@ -369,12 +369,12 @@ body.gameHostBg{
     background: url(./images/metal.png) repeat;
     border: groove 1px #a7a7a7;
 }
-
  /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
  .flip-card {
+    margin: 0 auto;
     background-color: transparent;
     width: 300px;
-    height: 200px;
+    height: 400px;
     border: 1px solid #f1f1f1;
     perspective: 1000px; /* Remove this if you don't want the 3D effect */
   }
@@ -390,7 +390,7 @@ body.gameHostBg{
   }
   
   /* Do an horizontal flip when you move the mouse over the flip box container */
-  .flip-card:hover .flip-card-inner {
+  .flip-card.revealed .flip-card-inner {
     transform: rotateY(180deg);
   }
   
@@ -411,7 +411,15 @@ body.gameHostBg{
   
   /* Style the back side */
   .flip-card-back {
-    background-color: dodgerblue;
     color: white;
     transform: rotateY(180deg);
-  } 
+  }
+
+
+.power-card-image {
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

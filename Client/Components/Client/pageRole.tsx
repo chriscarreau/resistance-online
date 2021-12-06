@@ -4,20 +4,20 @@ import { ClientUpdateAction } from '../../../shared/client-update-action.interfa
 import { ActionEnum, RoleEnum } from '../../../shared/enums';
 import { IPageRoleProps } from './props';
 import { SpyRevealBar } from './spyRevealBar';
-import { PageRoleState } from './states';
+import { ToggleState } from './states';
 
-export class PageRole extends React.Component<IPageRoleProps, PageRoleState> {
+export class PageRole extends React.Component<IPageRoleProps, ToggleState> {
 
   constructor(props) {
     super(props);
     this.state = {
-      showRole: false
+      isToggled: false
     };
   }
 
   showHideRole = () => {
     this.setState((prevState) => ({
-      showRole: !prevState.showRole
+      isToggled: !prevState.isToggled
     }));
   }
 
@@ -44,8 +44,8 @@ export class PageRole extends React.Component<IPageRoleProps, PageRoleState> {
           })
       }
       content = ( <div>
-                      <button onClick={this.showHideRole} className={(this.state.showRole ? "hidden" : "") + " btn btn-secondary"}>Afficher mon rôle</button>
-                      <div className={(this.state.showRole ? "" : "hidden")}>
+                      <button onClick={this.showHideRole} className={(this.state.isToggled ? "hidden" : "") + " btn btn-secondary"}>Afficher mon rôle</button>
+                      <div className={(this.state.isToggled ? "" : "hidden")}>
                         <img style={{width:"50vw", maxHeight:"50vh"}} onClick={this.showHideRole} src={imgRole}/>
                         {otherSpies}
                       </div>

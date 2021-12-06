@@ -24,6 +24,7 @@ export interface IGame {
     temporaryLeader?: number;
     powerSelectionPlayers: IPlayer[];
     playerSelectedForPower?: IPlayer;
+    playerUsingPower?: IPlayer;
     gameState: GameStateEnum;
     
     update(io: Server, clientAction: ClientUpdateAction): void;

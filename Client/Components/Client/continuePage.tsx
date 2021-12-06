@@ -25,7 +25,7 @@ export class ContinuePage extends React.Component<IGameProps> {
             </div>);
         }
         else {
-            content = "Voir le résultat sur l'écran principale";
+            content = "Rien à voir ici, regarder l'écran principale";
         }
         return content;
     }

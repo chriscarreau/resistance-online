@@ -9,16 +9,32 @@ export const arrayTeamSize: number[][] =  [
     [3,4,4,5,5,5],
 ];
 
+// export function getSmallPowerPool(): IPower[] {
+//     return [
+//         new KeepingCloseEyeOnYou(),
+//         new KeepingCloseEyeOnYou(),
+//         new NoConfidence(),
+//         new NoConfidence(),
+//         new StrongLeader(),
+//         new StrongLeader(),
+//         new OpinionMaker(),
+//         new TakeResponsability()
+//     ]
+// };
+
+
 export function getSmallPowerPool(): IPower[] {
     return [
-        new KeepingCloseEyeOnYou(),
-        new KeepingCloseEyeOnYou(),
-        new NoConfidence(),
-        new NoConfidence(),
-        new StrongLeader(),
-        new StrongLeader(),
-        new OpinionMaker(),
-        new TakeResponsability()
+        new Spotlight(),
+        new Spotlight(),
+        new Spotlight(),
+        new Spotlight(),
+        new Spotlight(),
+        new Spotlight(),
+        new Spotlight(),
+        // new OverheardConversation(),
+        // new EstablishConfidence(),
+        // new OpenUp()
     ]
 };
 
