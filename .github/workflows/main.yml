@@ -38,4 +38,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         PASSWORD: ${{ secrets.PASSWORD }}
-        script: ./home/chris/test/deploy.sh
+        script: /home/chris/test/deploy.sh
