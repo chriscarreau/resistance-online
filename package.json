@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --progress --profile && tsc -p ./app",
+    "build:frontend": "webpack --config webpack.config.js --progress --profile",
     "start": "webpack --config webpack.config.js --progress --profile && tsc -p ./app && node dist/app/index.js",
     "dev": "webpack-dev-server  --config webpack.config.js --progress --profile",
     "lint": "eslint --ext js --ext jsx src || exit 0"

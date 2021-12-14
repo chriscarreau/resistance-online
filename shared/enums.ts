@@ -31,7 +31,8 @@ export enum GameStateEnum {
     KEEPING_CLOSE_EYE_SELECT = 22,
     KEEPING_CLOSE_EYE_REVEAL = 23,
     MISSION_RESULT = 24,
-    GAME_OVER = 25
+    GAME_OVER = 25,
+    TAKE_RESPONSABILITY_SELECT = 26
 }
 
 export enum  MissionResultEnum {
@@ -54,5 +55,6 @@ export enum ActionEnum {
     VOTE_SUCCESS = 11,
     VOTE_FAIL = 12,
     REVEAL_MISSION = 13,
-    USE_POWER = 14
+    USE_POWER = 14,
+    ADD_REMOVE_POWER_STEAL = 15
 }

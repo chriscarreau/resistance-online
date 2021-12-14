@@ -4,7 +4,8 @@ import { IsCurrentTeamComplete, GetCurrentPlayer, IsPlayerSelectedForPower } fro
 import { IPowerSelectionProps } from './props';
 import { object } from 'prop-types';
 import { ClientUpdateAction } from '../../../shared/client-update-action.interface';
-import { ActionEnum } from '../../../shared/enums';
+import { ActionEnum, GameStateEnum } from '../../../shared/enums';
+import { PowerCard } from './powerCard';
 
 export class PagePowerSelection extends React.Component<IPowerSelectionProps> {
 
@@ -19,13 +20,15 @@ export class PagePowerSelection extends React.Component<IPowerSelectionProps> {
 
   render() {
     var that = this;
-    let content, selectingPlayerContent, otherPlayersContent;
+    let content, text, selectingPlayerContent, otherPlayersContent;
 
     const currentPlayer = GetCurrentPlayer(this.props.game);
     if (this.props.selectingPlayer.playerId === currentPlayer.playerId) {
-      selectingPlayerContent = (<div>
-        <div>
-          Sélectionnez un joueur
+      text = this.props.game.gameState === GameStateEnum.GIVE_POWER ? "Sélectionnez à qui donner le pouvoir" : "Sélectionnez sur qui utiliser le pouvoir"
+      selectingPlayerContent = (<div className="player-selection-content">
+        <div className="player-selection-header">
+           {text}
+          <PowerCard powerType={this.props.powerType}></PowerCard>
         </div>
         {
           this.props.players.map(function (x, i) {
@@ -37,8 +40,10 @@ export class PagePowerSelection extends React.Component<IPowerSelectionProps> {
         </div>
       </div>);
     } else {
+      text = this.props.game.gameState === GameStateEnum.GIVE_POWER ? "En attente que le leader distribue le pouvoir" : "En attente du joueur qui utilise le pouvoir"
       otherPlayersContent = (<div>
-        En attente de la sélection du joueur
+        {text}
+       <PowerCard powerType={this.props.powerType}></PowerCard>
       </div>);
     }
     content = (<div>

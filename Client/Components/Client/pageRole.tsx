@@ -46,7 +46,7 @@ export class PageRole extends React.Component<IPageRoleProps, ToggleState> {
       content = ( <div>
                       <button onClick={this.showHideRole} className={(this.state.isToggled ? "hidden" : "") + " btn btn-secondary"}>Afficher mon rôle</button>
                       <div className={(this.state.isToggled ? "" : "hidden")}>
-                        <img style={{width:"50vw", maxHeight:"50vh"}} onClick={this.showHideRole} src={imgRole}/>
+                        <img className="role-reveal-image" onClick={this.showHideRole} src={imgRole}/>
                         {otherSpies}
                       </div>
                       <button onClick={this.accepterRole} className="btn btn-primary">J'ai pris connaissance de mon rôle</button>

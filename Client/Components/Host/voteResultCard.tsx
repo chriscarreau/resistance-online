@@ -9,7 +9,7 @@ export class VoteResultCard extends React.Component<{accepted: boolean}> {
                     </div>)
 
     return (
-        <div className="col-xs-2">
+        <div>
           {content}
         </div>);
   }

@@ -21,8 +21,8 @@ export class PageTeamSelection extends React.Component<ITeamSelectionProps> {
     var that = this;
     let content, leader, autre;
     if (this.props.player.isLeader) {
-      leader = (<div>
-        <div>
+      leader = (<div className="player-selection-content">
+        <div className="player-selection-header">
           Sélectionnez les membres de votre équipe!
         </div>
         {

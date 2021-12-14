@@ -21,6 +21,10 @@ export interface IPlayerProps {
     player: IPlayer;
 }
 
+export interface IPowerProps {
+    powerType: PowerTypeEnum;
+}
+
 export interface IPowerChoiceProps {
     game: IGame;
     powerType: PowerTypeEnum;
@@ -45,8 +49,15 @@ export interface ITeamSelectionProps {
 
 export interface IPowerSelectionProps {
     selectingPlayer: IPlayer;
+    powerType: PowerTypeEnum;
     players: IPlayer[];
     game: IGame;
+}
+
+export interface IPlayerPowerBarProps {
+    player: IPlayer;
+    powerType: PowerTypeEnum;
+    selected: boolean;
 }
 
 export interface IPlayerBarProps {

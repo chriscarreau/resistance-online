@@ -3,8 +3,10 @@ import React from "react";
 import { IPowerChoiceProps } from "./props";
 import { GetCurrentPlayer } from '../../Utils';
 import { ActionEnum } from "../../../shared/enums";
+import { PowerDescriptions, PowerNames } from "../../../shared/constants";
 import { PowerTypeEnum } from "../../../shared/power.interface";
 import { ClientUpdateAction } from "../../../shared/client-update-action.interface";
+import { PowerCard } from "./powerCard";
 
 export class PowerChoice extends React.Component<IPowerChoiceProps> {
 
@@ -20,19 +22,9 @@ export class PowerChoice extends React.Component<IPowerChoiceProps> {
     render() {
         let content = undefined;
         const currentPlayer = GetCurrentPlayer(this.props.game);
-        let powerText, powerImage;
-        switch (this.props.powerType) {
-            case PowerTypeEnum.StrongLeader:
-                powerText = "Voulez-vous voler le prochain tour de mission ?"
-                break;
-            case PowerTypeEnum.NoConfidence:
-                powerText = "Voulez-vous voler annuler le résultat du vote ?"
-                break;
-        }
         if (currentPlayer.powers.some(pow => pow.type === this.props.powerType)) {
-            // TODO: Ajouter image de pouvoir ici
-            content = <div>
-                {powerText}
+            content = <div className="center-content">
+                <PowerCard powerType={this.props.powerType}></PowerCard>
                 <button onClick={() => this.choose(ActionEnum.USE_POWER)}  className="btn btn-primary">
                     Utiliser le pouvoir
                 </button>
@@ -42,7 +34,10 @@ export class PowerChoice extends React.Component<IPowerChoiceProps> {
             </div>;
         }
         else {
-            content = <div>En attente de la décision du joueur qui a le pouvoir</div>
+            content = <div className="center-content">
+                En attente de la décision du joueur qui a le pouvoir
+                <PowerCard powerType={this.props.powerType}></PowerCard>
+                </div>
         }
         return content;
     }

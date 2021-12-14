@@ -1,11 +1,12 @@
 import { object } from 'prop-types';
 import React from 'react';
 import { RoleEnum } from '../../../shared/enums';
-import { IPlayerProps } from './props';
+import { IPageRoleProps } from './props';
+import { SpyRevealBar } from './spyRevealBar';
 import { StatusBarState } from './states';
 
-export class StatusBar extends React.Component<IPlayerProps, StatusBarState> {
-  
+export class StatusBar extends React.Component<IPageRoleProps, StatusBarState> {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,37 +15,43 @@ export class StatusBar extends React.Component<IPlayerProps, StatusBarState> {
     };
   }
 
-  toggleMenu(){
+  toggleMenu() {
     this.setState((prevState) => ({
       showRole: prevState.showRole,
       showMenu: !prevState.showMenu
     }));
   }
 
-  showRole(){
+  showRole() {
     this.setState((prevState) => ({
       showRole: true,
       showMenu: prevState.showMenu
     }));
-    this.setState({"showRole": true});
+    this.setState({ "showRole": true });
   }
 
-  hideRole(){
+  hideRole() {
     this.setState((prevState) => ({
       showRole: false,
       showMenu: prevState.showMenu
     }));
-    this.setState({"showRole": false});
+    this.setState({ "showRole": false });
   }
 
-  quitter(){
-    if(confirm("Êtes-vous sûre de vouloir quitter ? Cela arrête la partie pour tout le monde.")){
+  quitter() {
+    if (confirm("Êtes-vous sûre de vouloir quitter ? Cela arrête la partie pour tout le monde.")) {
       window.localStorage.removeItem("gameOptions");
       this.context.router.push('/');
     }
   }
 
   render() {
+    let otherSpies;
+    if (this.props.player.role === RoleEnum.SPY) {
+      otherSpies = this.props.spies.map(function (spy, i) {
+        return (<SpyRevealBar player={spy} />);
+      })
+    }
     return (
       <div className="status-bar">
         <nav className="navbar navbar-default navbar-fixed-top">
@@ -68,7 +75,8 @@ export class StatusBar extends React.Component<IPlayerProps, StatusBarState> {
           </div>
         </nav>
         <div onClick={this.hideRole.bind(this)} className={(this.state.showRole ? "" : "hidden") + " role-div"}>
-          <img src={this.props.player.role === RoleEnum.RESISTANCE ? "/images/Bleu.svg":"/images/Rouge.svg"}/>
+          <img className="role-reveal-image" src={this.props.player.role === RoleEnum.RESISTANCE ? "/images/Bleu.svg" : "/images/Rouge.svg"} />
+          {otherSpies}
         </div>
       </div>
     )
@@ -76,7 +84,7 @@ export class StatusBar extends React.Component<IPlayerProps, StatusBarState> {
   static propTypes = {
     player: object.isRequired
   };
-  
+
   static contextTypes = {
     router: object.isRequired
   };

@@ -31,6 +31,18 @@ export function IsPlayerSelectedForPower(player: IPlayer, game: IGame) {
     return false;
 }
 
+export function IsPowerSelectedForSteal(player: IPlayer, power: PowerTypeEnum, game: IGame) {
+    if (game.gameState === GameStateEnum.NOT_STARTED)
+        return false;
+
+    for (let pow of game.powerStealingSelection) {
+        if (pow.player.playerId === player.playerId && pow.powerType === power) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export function HasPlayerVoted(game: IGame, playerId: string): boolean {
     if (game.missions.length > 0 && game.playerRoleAccepte.length > 0) {
         let mission = game.missions[game.currentMission];
@@ -43,6 +55,7 @@ export function HasPlayerVoted(game: IGame, playerId: string): boolean {
                 }
                 break;
             case GameStateEnum.VOTE:
+            case GameStateEnum.OPINION_MAKER_VOTE:
                 for (let i = 0; i < mission.playerAccept.length; i++) {
                     if (mission.playerAccept[i].playerId === playerId) {
                         return true;
@@ -55,6 +68,7 @@ export function HasPlayerVoted(game: IGame, playerId: string): boolean {
                 }
                 break;
             case GameStateEnum.MISSION:
+            case GameStateEnum.SPOTLIGHT_VOTE:
                 for (let i = 0; i < mission.playerVoteSuccess.length; i++) {
                     if (mission.playerVoteSuccess[i].playerId === playerId) {
                         return true;
@@ -123,17 +137,4 @@ export function GetPlayer(game: IGame, playerId: string): IPlayer {
         }
     }
     return null;
-}
-
-/**
- * Shuffles an array in-place
- * @param array array to shuffle
- */
-export function ShuffleArray(array: any[]): void {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * i)
-        const k = array[i]
-        array[i] = array[j]
-        array[j] = k
-    }
 }

@@ -7,10 +7,10 @@ export class VoteResult extends React.Component<IGameProps> {
   render() {
     let content;
     let resultatPositif = this.props.game.missions[this.props.game.currentMission].playerAccept.map(function(x, i){
-                              return <VoteResultCard key={i} accepted={true} />
+                              return <div className="col-xs-2"><VoteResultCard key={i} accepted={true} /></div>
                           });
     let resultatNegatif = this.props.game.missions[this.props.game.currentMission].playerReject.map(function(x, i){
-                              return <VoteResultCard key={i} accepted={false} />
+                              return <div className="col-xs-2"><VoteResultCard key={i} accepted={false} /></div>
                           });
     content = ( <div  className="result-list clearfix">
                     {resultatPositif}

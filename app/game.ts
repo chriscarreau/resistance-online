@@ -30,6 +30,7 @@ export class Game implements IGame {
     temporaryLeader?: number;
     powerSelectionPlayers: IPlayer[] = [];
     playerSelectedForPower?: IPlayer;
+    powerStealingSelection: {player: IPlayer, powerType: PowerTypeEnum}[] = [];
     playerUsingPower?: IPlayer;
     gameState: GameStateEnum = GameStateEnum.NOT_STARTED;
 
@@ -99,6 +100,10 @@ export class Game implements IGame {
                     if (this.drawnPower?.type === PowerTypeEnum.EstablishConfidence) {
                         this.gameState = GameStateEnum.ESTABLISH_CONFIDENCE_SELECT;
                     }
+                    else if (this.drawnPower?.type === PowerTypeEnum.TakeResponsability && this.players.every(p => p.powers.length === 0)) {
+                        // If the power was "steal a power", but no one has any powers then let's just skip the whole give power phase
+                        this.gameState = GameStateEnum.TEAM_SELECTION;
+                    }
                     else {
                         this.gameState = GameStateEnum.GIVE_POWER;
                     }
@@ -126,10 +131,47 @@ export class Game implements IGame {
                         else if (this.drawnPower?.type === PowerTypeEnum.OpenUp) {
                             this.gameState = GameStateEnum.OPEN_UP_SELECT;
                         }
+                        else if (this.drawnPower?.type === PowerTypeEnum.TakeResponsability) {
+                            if (this.players.some(p => p.powers.length > 0)) {
+                                this.gameState = GameStateEnum.TAKE_RESPONSABILITY_SELECT;
+                            }
+                            else {
+                                this.removePowerFromAllPlayer(PowerTypeEnum.TakeResponsability);
+                                this.gameState = GameStateEnum.TEAM_SELECTION;
+                            }
+                        }
                         else {
                             this.gameState = GameStateEnum.TEAM_SELECTION;
                         }
                         this.drawnPower = undefined;
+                    }
+                }
+                break;
+            case GameStateEnum.TAKE_RESPONSABILITY_SELECT:
+                // Player chose who to steal power from
+                if (clientAction.action === ActionEnum.ADD_REMOVE_POWER_STEAL) {
+                    const selectedPlayer = this.players.find(p => p.playerId === clientAction.selectedPlayerId);
+                    if (!selectedPlayer || !clientAction.selectedPowerType){
+                        return;
+                    }
+                    const index = this.powerStealingSelection?.findIndex(kv => kv.player.playerId === clientAction.selectedPlayerId && kv.powerType === clientAction.selectedPowerType);
+                    if (index !== -1) {
+                        this.powerStealingSelection.splice(index, 1);
+                    }
+                    else {
+                        this.powerStealingSelection.push({player: selectedPlayer, powerType: clientAction.selectedPowerType});
+                    }
+                }
+                else if (clientAction.action === ActionEnum.SUBMIT_TEAM) {
+                    if (this.powerStealingSelection.length === 1) {
+                        const selectedPlayer = this.players.find(p => p.playerId === this.powerStealingSelection[0].player.playerId)
+                        if (selectedPlayer) {
+                            const powerIndex = selectedPlayer.powers.findIndex(p => p.type === this.powerStealingSelection[0].powerType)
+                            player.powers.push(selectedPlayer.powers.splice(powerIndex, 1)[0])
+                            this.removePowerFromAllPlayer(PowerTypeEnum.TakeResponsability);
+                            this.powerStealingSelection = [];
+                            this.gameState = GameStateEnum.TEAM_SELECTION;
+                        }
                     }
                 }
                 break;
@@ -156,6 +198,7 @@ export class Game implements IGame {
                 // We are only waiting for the person to acknowledge he saw the role of the other player
                 if (clientAction.action === ActionEnum.NEXT_STEP) {
                     this.removePowerFromAllPlayer(PowerTypeEnum.EstablishConfidence);
+                    this.playerSelectedForPower = undefined;
                     this.gameState = GameStateEnum.TEAM_SELECTION;
                 }
                 break;
@@ -182,6 +225,7 @@ export class Game implements IGame {
                 // We are only waiting for the person to acknowledge he saw the role of the other player
                 if (clientAction.action === ActionEnum.NEXT_STEP) {
                     this.removePowerFromAllPlayer(PowerTypeEnum.OverheardConversation);
+                    this.playerSelectedForPower = undefined;
                     this.gameState = GameStateEnum.TEAM_SELECTION;
                 }
                 break;
@@ -208,6 +252,7 @@ export class Game implements IGame {
                 // We are only waiting for the person to acknowledge he saw the role of the other player
                 if (clientAction.action === ActionEnum.NEXT_STEP) {
                     this.removePowerFromAllPlayer(PowerTypeEnum.OpenUp);
+                    this.playerSelectedForPower = undefined;
                     this.gameState = GameStateEnum.TEAM_SELECTION;
                 }
                 break;
@@ -246,10 +291,14 @@ export class Game implements IGame {
                 }
                 else if (clientAction.action === ActionEnum.VOTE_ACCEPT) {
                     currentMission.acceptTeam(player);
-                    this.gameState = GameStateEnum.VOTE;
                 }
                 else if (clientAction.action === ActionEnum.VOTE_REJECT) {
                     currentMission.rejectTeam(player);
+                }
+                const playerWhoVoted = currentMission.playerAccept.concat(currentMission.playerReject);
+                const playerWithOpinionMaker = this.players.filter(p => p.powers.some(p => p.type === PowerTypeEnum.OpinionMaker))
+                // check if everyone who has the opinion maker power has voted before continuing
+                if (playerWithOpinionMaker.every(p => playerWhoVoted.some(pl => pl.playerId === p.playerId))) {
                     this.gameState = GameStateEnum.VOTE;
                 }
                 break;
@@ -380,6 +429,7 @@ export class Game implements IGame {
                 }
                 else if (clientAction.action === ActionEnum.REVEAL_MISSION && currentMission.isMissionComplete()) {
                     this.missions[this.currentMission].getMissionResult();
+                    this.playerSelectedForPower = undefined;
                     if (this.anyPlayerHasPower(PowerTypeEnum.KeepingCloseEyeOnYou)) {
                         this.gameState = GameStateEnum.KEEPING_CLOSE_EYE_CHOICE;
                     }
@@ -419,6 +469,7 @@ export class Game implements IGame {
                 break;
             case GameStateEnum.KEEPING_CLOSE_EYE_REVEAL:
                 if (clientAction.action === ActionEnum.NEXT_STEP) {
+                    this.playerSelectedForPower = undefined;
                     this.gameState = GameStateEnum.MISSION_RESULT;
                 }
                 break;
@@ -572,7 +623,7 @@ export class Game implements IGame {
     }
 
     drawRandomPower(): IPower {
-        const index = Math.floor(Math.random() * this.powerPool.length)
+        const index = Math.floor(Math.random() * this.powerPool.length);
         // Removes an element from the array (in-place), while returning it
         return this.powerPool.splice(index, 1)[0];
     }

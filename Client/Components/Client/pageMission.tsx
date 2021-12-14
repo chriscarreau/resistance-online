@@ -89,7 +89,7 @@ export class PageMission extends React.Component<IPageMissionProps, ToggleState>
         </div>);
         }
         else {
-          <div>En attente du choix de {spotlightPlayer.playerName}</div>
+          content = <div>En attente du choix de {spotlightPlayer.playerName}</div>
         }
       }
       else {
@@ -107,7 +107,7 @@ export class PageMission extends React.Component<IPageMissionProps, ToggleState>
       }
     }
     return (
-      <div>
+      <div className="center-content">
         {content}
       </div>
     )

@@ -23,6 +23,7 @@ export interface IGame {
     drawnPower?: IPower;
     temporaryLeader?: number;
     powerSelectionPlayers: IPlayer[];
+    powerStealingSelection: {player: IPlayer, powerType: PowerTypeEnum}[];
     playerSelectedForPower?: IPlayer;
     playerUsingPower?: IPlayer;
     gameState: GameStateEnum;

@@ -84,7 +84,7 @@ export class PageVote extends React.Component<IPageVoteProps, ToggleState> {
         </div>);
         }
         else {
-          <div>En attente {opinionMakers.length > 1 ? "des leaders" : "du leader"} d'opinion</div>
+          content = <div>En attente {opinionMakers.length > 1 ? "des leaders" : "du leader"} d'opinion</div>
         }
       }
       else {

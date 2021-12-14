@@ -1,47 +1,48 @@
+import { PowerDescriptions, PowerNames } from "../shared/constants";
 import { IPower, PowerTypeEnum } from "../shared/power.interface";
 
 export class OpinionMaker implements IPower {
     type = PowerTypeEnum.OpinionMaker;
-    name = "Leader d'opinion";
-    description = "Vous devez voter face visible et avant les autres joueurs pour le reste de la partie";
+    name = PowerNames[PowerTypeEnum.OpinionMaker]
+    description = PowerDescriptions[PowerTypeEnum.OpinionMaker];
 }
 export class KeepingCloseEyeOnYou implements IPower {
     type = PowerTypeEnum.KeepingCloseEyeOnYou;
-    name = "Conversation surprise"
-    description = "Vous pouvez regarder une carte Mission jouée par un autre joueur";
+    name = PowerNames[PowerTypeEnum.KeepingCloseEyeOnYou]
+    description = PowerDescriptions[PowerTypeEnum.KeepingCloseEyeOnYou];
 }
 export class Spotlight implements IPower {
     type = PowerTypeEnum.Spotlight;
-    name = "En pleine lumière"
-    description = "Vous pouvez forcer un joueur à révéler la carte Mission qu'il va choisir";
+    name = PowerNames[PowerTypeEnum.Spotlight]
+    description = PowerDescriptions[PowerTypeEnum.Spotlight];
 }
 export class OverheardConversation implements IPower {
     type = PowerTypeEnum.OverheardConversation;
-    name = "Oreille indiscrète"
-    description = "Vous devez regarder la carte identité de votre voisin de gauche ou de droite";
+    name = PowerNames[PowerTypeEnum.OverheardConversation]
+    description = PowerDescriptions[PowerTypeEnum.OverheardConversation];
 }
 export class StrongLeader implements IPower {
     type = PowerTypeEnum.StrongLeader;
-    name = "Leader charismatique"
-    description = "Vous pouvez devenir le nouveau Leader; à jouer avant que les cartes Complots (pouvoirs) ou Escouades (gun) ne soient distribuées";
+    name = PowerNames[PowerTypeEnum.StrongLeader]
+    description = PowerDescriptions[PowerTypeEnum.StrongLeader];
 }
 export class NoConfidence implements IPower {
     type = PowerTypeEnum.NoConfidence;
-    name = "Vote de défiance"
-    description = "Vous pouvez annuler un vote positif et ainsi changer de leader";
+    name = PowerNames[PowerTypeEnum.NoConfidence]
+    description = PowerDescriptions[PowerTypeEnum.NoConfidence];
 }
 export class EstablishConfidence implements IPower {
     type = PowerTypeEnum.EstablishConfidence;
-    name = "Question de confiance"
-    description = "Le leader doit montrer sa carte identité au joueur de son choix";
+    name = PowerNames[PowerTypeEnum.EstablishConfidence]
+    description = PowerDescriptions[PowerTypeEnum.EstablishConfidence];
 }
 export class OpenUp implements IPower {
     type = PowerTypeEnum.OpenUp;
-    name = "Confidence"
-    description = "Vous devez révéler votre carte identité au joueur de votre choix";
+    name = PowerNames[PowerTypeEnum.OpenUp]
+    description = PowerDescriptions[PowerTypeEnum.OpenUp];
 }
 export class TakeResponsability implements IPower {
     type = PowerTypeEnum.TakeResponsability;
-    name = "Prendre les choses en mains"
-    description = "Vous devez voler une carte Complot à un autre joueur";
+    name = PowerNames[PowerTypeEnum.TakeResponsability]
+    description = PowerDescriptions[PowerTypeEnum.TakeResponsability];
 }

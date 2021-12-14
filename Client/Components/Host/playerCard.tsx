@@ -1,14 +1,14 @@
 import React from 'react';
 import { GameStateEnum } from '../../../shared/enums';
 import { PowerTypeEnum } from '../../../shared/power.interface';
-import { HasPlayerVoted } from '../../Utils';
+import { HasPlayerVoted, IsPowerSelectedForSteal } from '../../Utils';
 import { IPlayerCardProps } from '../Client/props';
 import { MissionResultCard } from './missionResultCard';
 import { VoteResultCard } from './voteResultCard';
 
 export class PlayerCard extends React.Component<IPlayerCardProps> {
   render() {
-    let nbMissionsBleu, nbMissionsRouge, isPlayerLeader, isLastLeader, playerVoted, powers;
+    let nbMissionsBleu, nbMissionsRouge, isPlayerLeader, isLastLeader, playerVoted, powers, resultCard;
     let player = this.props.player;
 
     if (player.nbMissionBleu > 0) {
@@ -42,8 +42,9 @@ export class PlayerCard extends React.Component<IPlayerCardProps> {
 
     if (this.props.player.powers.length > 0) {
       powers = this.props.player.powers.map(power => {
-        return <div className="player-powers">
-          {power.name}
+        return <div className={"player-powers " + (IsPowerSelectedForSteal(this.props.player, power.type, this.props.game) ? "selected" : "")}>
+          <img className="small-power-icon" src={`/images/power-icons/${PowerTypeEnum[power.type]}.png`}/>
+          <span className="small-power-name">{power.name}</span>
         </div>;
       });
     }
@@ -61,21 +62,30 @@ export class PlayerCard extends React.Component<IPlayerCardProps> {
     </div>)
 
 
-    if (this.props.hasVoted !== null && this.props.player.powers.some(p => p.type === PowerTypeEnum.OpinionMaker)) {
+    if (this.props.hasVoted !== null) {
       switch (this.props.game.gameState) {
         case GameStateEnum.VOTE:
-          content = <VoteResultCard accepted={this.props.hasVoted} />
+        case GameStateEnum.OPINION_MAKER_VOTE:
+          if (this.props.player.powers.some(p => p.type === PowerTypeEnum.OpinionMaker)){
+            resultCard = <VoteResultCard accepted={this.props.hasVoted} />
+          }
           break;
         case GameStateEnum.MISSION:
-          content = <MissionResultCard success={this.props.hasVoted} />
+        case GameStateEnum.SPOTLIGHT_VOTE:
+          if (this.props.player.playerId === this.props.game.playerSelectedForPower?.playerId){
+            resultCard = <MissionResultCard success={this.props.hasVoted} />
+          }
           break;
       }
     }
 
 
     return (
-      <div className="col-xs-2">
+      <div className="col-xs-2 position-relative">
         {content}
+        <div className="overlapping-result">
+          {resultCard}
+        </div>
       </div>);
   }
 }

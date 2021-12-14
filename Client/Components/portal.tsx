@@ -20,7 +20,6 @@ export class Portal extends React.Component {
       //donc on fait rien et la page de connection s'affiche
       return;
     }
-    debugger;
     if(oldGameOptions.isHost) {
       window.location.href = '/host';
     }
@@ -32,7 +31,7 @@ export class Portal extends React.Component {
   render() {
     return (
       <div className="portal-div">
-        <h1>Bienvenue au jeu de Résistance en ligne!</h1>
+        <h1>Résistance</h1>
         <div className="portal-form" id="joinForm">
             <div className="form-group">
                 <label htmlFor="roomName">Partie #</label>
@@ -47,6 +46,9 @@ export class Portal extends React.Component {
             <button onClick={this.btnJoinGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnJoinGameForm">Rejoindre une partie</button>
             <hr/>
             <button onClick={this.btnCreateGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnCreateGame">Créer une partie</button>
+        </div>
+        <div className="version-number">
+        v2.0.0
         </div>
       </div>
     )

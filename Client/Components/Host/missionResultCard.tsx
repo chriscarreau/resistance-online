@@ -9,7 +9,7 @@ export class MissionResultCard extends React.Component<{success: boolean}> {
                     </div>)
 
     return (
-        <div className="col-xs-2">
+        <div>
           {content}
         </div>);
   }
