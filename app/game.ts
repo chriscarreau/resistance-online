@@ -342,18 +342,7 @@ export class Game implements IGame {
                     }
                     // Refusé
                     else {
-                        this.players[this.getCurrentLeader()].isLeader = false;
-                        currentMission.voteRejected();
-                        // If there was a temporary leader, revert to the normal order
-                        this.temporaryLeader = undefined;
-                        console.log("currentLeader = " + this.getCurrentLeader());
-                        if (this.anyPlayerHasPower(PowerTypeEnum.StrongLeader)) {
-                            this.gameState = GameStateEnum.STRONG_LEADER;
-                        }
-                        else {
-                            this.players[this.getCurrentLeader()].isLeader = true;
-                            this.gameState = GameStateEnum.TEAM_SELECTION;
-                        }
+                        this.goToNextRound(currentMission);
                     }
                 }
                 break;
@@ -361,12 +350,7 @@ export class Game implements IGame {
             case GameStateEnum.NO_CONFIDENCE_CHOICE:
                 if (clientAction.action === ActionEnum.USE_POWER) {
                     this.removePowerFromPlayer(PowerTypeEnum.NoConfidence, player);
-                    this.players[this.getCurrentLeader()].isLeader = false;
-                    currentMission.voteRejected();
-                    // If there was a temporary leader, revert to the normal order
-                    this.temporaryLeader = undefined;
-                    this.players[this.getCurrentLeader()].isLeader = true;
-                    this.gameState = GameStateEnum.TEAM_SELECTION;
+                    this.goToNextRound(currentMission);
                     break;
                 }
                 else if (clientAction.action === ActionEnum.NEXT_STEP) {
@@ -481,6 +465,7 @@ export class Game implements IGame {
                     }
                     else {
                         this.players[this.getCurrentLeader()].isLeader = false;
+                        this.temporaryLeader = undefined;
                         this.startNewMission();
                         if (this.anyPlayerHasPower(PowerTypeEnum.StrongLeader)) {
                             this.gameState = GameStateEnum.STRONG_LEADER;
@@ -501,6 +486,20 @@ export class Game implements IGame {
                 break;
         }
         io.to(this.gameId).emit('gameUpdate', this);
+    }
+
+    goToNextRound(currentMission: IMission) {
+        this.players[this.getCurrentLeader()].isLeader = false;
+        currentMission.voteRejected();
+        // If there was a temporary leader, revert to the normal order
+        this.temporaryLeader = undefined;
+        if (this.anyPlayerHasPower(PowerTypeEnum.StrongLeader)) {
+            this.gameState = GameStateEnum.STRONG_LEADER;
+        }
+        else {
+            this.players[this.getCurrentLeader()].isLeader = true;
+            this.gameState = GameStateEnum.TEAM_SELECTION;
+        }
     }
 
     resetGame(): void {
