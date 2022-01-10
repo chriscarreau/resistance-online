@@ -48,7 +48,7 @@ export class Portal extends React.Component {
             <button onClick={this.btnCreateGameClick.bind(this)} className="btn btn-primary btn-portal" id="btnCreateGame">Créer une partie</button>
         </div>
         <div className="version-number">
-        v2.0.0
+        v2.0.1
         </div>
       </div>
     )

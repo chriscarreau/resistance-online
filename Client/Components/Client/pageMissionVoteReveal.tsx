@@ -45,7 +45,7 @@ export class PageMissionVoteReveal extends React.Component<IPageRevealProps, Tog
                         Afficher le vote de {this.props.playerRevealing.playerName}
                       </button>
                       <div className={(this.state.isToggled ? "" : "hidden")}>
-                        <img style={{width:"50vw", maxHeight:"50vh"}} onClick={this.showHideRole} src={imgVote}/>
+                        <img title={playerVotedSuccess ? "Success!" : "Fail!"} style={{width:"50vw", maxHeight:"50vh"}} onClick={this.showHideRole} src={imgVote}/>
                       </div>
                       <button onClick={this.continue} className="btn btn-primary">Continuer</button>
                   </div>;
