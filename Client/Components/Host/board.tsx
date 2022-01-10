@@ -1,5 +1,5 @@
 import React from 'react';
-import { MissionResultEnum } from '../../../shared/enums';
+import { GameStateEnum, MissionResultEnum } from '../../../shared/enums';
 import { IGameProps } from '../Client/props';
 import { PastilleMission } from './pastilleMission';
 
@@ -13,7 +13,7 @@ export class Board extends React.Component<IGameProps> {
         <div className="missions clearfix">
           {game.missions.map(function(mission, i){
             var color = "white"
-            if (mission){
+            if (game.gameState !== GameStateEnum.KEEPING_CLOSE_EYE_CHOICE && mission){
               switch(mission.result){
                 case MissionResultEnum.RESISTANCE:
                   color = "blue"
